@@ -29,7 +29,7 @@ struct HourlyForecastView: View {
             RoundedRectangle(cornerRadius: 4)
                 .fill(.white)
         )
-            
+        
     }
 }
 
@@ -37,52 +37,46 @@ struct MainView: View {
     @EnvironmentObject var appManager : AppManager
     let colourTop = Color(red: 0.16, green: 0.33, blue: 0.66)
     let colourBottom = Color(red: 0.63, green: 0.76, blue: 0.95)
-
+    
     var body: some View {
         HStack{
             Spacer()
             VStack {
                 if let citypage = appManager.citypage {
-                    
-                    
-                    if let location = citypage.location {
-                        Text("\(location.name), \(location.province)")
-                            .font(.headline)
-                            .padding(.bottom, 35)
-                    }
+                    let location = citypage.location
+                    Text("\(location.name), \(location.province)")
+                        .font(.headline)
+                        .padding(.bottom, 35)
                     HStack{
-                        if let currentConditions = citypage.currentConditions {
-                            Image(currentConditions.iconName)
-                                .resizable()
-                                .frame(width: 80, height: 80)
-                                .padding(.trailing, 15)
-                            
-                            VStack(alignment: .leading){
-                                Text(String(format:"%.0fºC", currentConditions.temperature))
-                                    .font(.largeTitle)
-                                Text(currentConditions.condition)
-                                    .bold()
-                                Text(String(format:"Wind: \(currentConditions.wind.direction) %.0f km/h", currentConditions.temperature))
+                        let currentConditions = citypage.currentConditions
+                        Image(currentConditions.iconName)
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                            .padding(.trailing, 15)
+                        
+                        VStack(alignment: .leading){
+                            Text(String(format:"%.0fºC", currentConditions.temperature))
+                                .font(.largeTitle)
+                            Text(currentConditions.condition)
+                                .bold()
+                            Text(String(format:"Wind: \(currentConditions.wind.direction) %.0f km/h", currentConditions.temperature))
+                                .font(.footnote)
+                            if let gust = currentConditions.wind.gust {
+                                Text(String(format:"Gusts: %.0f km/h", gust))
                                     .font(.footnote)
-                                if let gust = currentConditions.wind.gust {
-                                    Text(String(format:"Gusts: %.0f km/h", gust))
-                                        .font(.footnote)
-                                }
                             }
                         }
                     }
                     .padding(.bottom, 35)
-                    if let hourlyForecast = citypage.hourlyForecastGroup?.hourlyForecast {
-                        if hourlyForecast.count >= 3 {
-                            
-                            HStack(spacing:4){
-                                HourlyForecastView(hourlyForecast: hourlyForecast[0])
-                                HourlyForecastView(hourlyForecast: hourlyForecast[1])
-                                HourlyForecastView(hourlyForecast: hourlyForecast[2])
-                            }
-                            .foregroundStyle(.black)
-                            
+                    let hourlyForecast = citypage.hourlyForecastGroup.hourlyForecast
+                    if hourlyForecast.count >= 3 {
+                        
+                        HStack(spacing:4){
+                            HourlyForecastView(hourlyForecast: hourlyForecast[0])
+                            HourlyForecastView(hourlyForecast: hourlyForecast[1])
+                            HourlyForecastView(hourlyForecast: hourlyForecast[2])
                         }
+                        .foregroundStyle(.black)
                     }
                 } else {
                     Text("No weather data available.")
@@ -96,7 +90,7 @@ struct MainView: View {
         }
         .background(
             LinearGradient(gradient: Gradient(colors: [colourTop, colourTop, colourBottom]), startPoint: .top, endPoint: .bottom)
-            )
+        )
     }
 }
 
@@ -104,5 +98,5 @@ struct MainView: View {
     let appManager = AppManager()
     MainView()
         .environmentObject(appManager)
-
+    
 }

@@ -87,10 +87,12 @@ struct HourlyForecast : Decodable {
 struct HourlyForecastGroup : Decodable {
     let hourlyForecast: [HourlyForecast]
 }
- 
+
+
+
 struct Citypage : Decodable {
-    var location: Location? = nil
-    var currentConditions: CurrentConditions? = nil
-    var forecastGroup: ForecastGroup? = nil
-    var hourlyForecastGroup: HourlyForecastGroup? = nil
+    var location: Location
+    var currentConditions: CurrentConditions
+    var forecastGroup: ForecastGroup
+    var hourlyForecastGroup: HourlyForecastGroup
 }
