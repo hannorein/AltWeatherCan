@@ -89,10 +89,34 @@ struct HourlyForecastGroup : Decodable {
 }
 
 
+struct DateTime : Decodable {
+    let name : String
+    let UTCOffset : Int
+    let timeStamp : String
+    
+    var dateTimeLocal: String {
+        if (UTCOffset != 0) {
+            return "Error. Not UTC."
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddHHmmss"
+        let date = dateFormatter.date(from:timeStamp)!
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "H:mm"
+        return dateFormatter2.string(from: date)
+    }
+}
+
+struct RiseSet : Decodable {
+    let dateTime : [DateTime]
+}
 
 struct Citypage : Decodable {
-    var location: Location
-    var currentConditions: CurrentConditions
-    var forecastGroup: ForecastGroup
-    var hourlyForecastGroup: HourlyForecastGroup
+    let location: Location
+    let currentConditions: CurrentConditions
+    let forecastGroup: ForecastGroup
+    let hourlyForecastGroup: HourlyForecastGroup
+    let riseSet : RiseSet
 }
