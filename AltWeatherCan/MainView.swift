@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  AltWeatherCan
 //
 //  Created by Hanno Rein on 2024-10-26.
@@ -16,7 +16,7 @@ struct HourlyForecastView: View {
                 .frame(width: 30, height: 30)
                 .padding(.trailing, 5)
             VStack(alignment: .leading){
-                Text(String(format:"000pm"))
+                Text(hourlyForecast.dateTimeLocal)
                     .font(.footnote)
                 Text(String(format:"%.0fºC", hourlyForecast.temperature))
                     .bold()
@@ -24,7 +24,7 @@ struct HourlyForecastView: View {
             .font(.footnote)
         }
         .padding(5)
-        .padding( .trailing, 25)
+        .padding( .trailing, 15)
         .background(
             RoundedRectangle(cornerRadius: 4)
                 .fill(.white)
@@ -46,7 +46,7 @@ struct MainView: View {
                     
                     
                     if let location = citypage.location {
-                        Text(location.name)
+                        Text("\(location.name), \(location.province)")
                             .font(.headline)
                             .padding(.bottom, 35)
                     }
