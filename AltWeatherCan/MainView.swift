@@ -74,12 +74,12 @@ struct MainView: View {
                     }
                     .padding(.bottom, 35)
                     let hourlyForecast = citypage.hourlyForecastGroup.hourlyForecast
-                    if hourlyForecast.count >= 3 {
-                        HStack(spacing:4){
-                            HourlyForecastView(hourlyForecast: hourlyForecast[0])
-                            HourlyForecastView(hourlyForecast: hourlyForecast[1])
-                            HourlyForecastView(hourlyForecast: hourlyForecast[2])
+                    ScrollView(.horizontal) {
+                        HStack (spacing: 4){
+                        ForEach(hourlyForecast) { forecast in
+                            HourlyForecastView(hourlyForecast: forecast)
                         }
+                    }
                         .foregroundStyle(.black)
                     }
                     let sunset = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunset" })

@@ -65,7 +65,8 @@ struct ForecastGroup : Decodable {
     let forecast: Forecast
 }
 
-struct HourlyForecast : Decodable {
+struct HourlyForecast : Decodable, Identifiable {
+    let id = UUID()
     let dateTimeUTC : String
     var dateTimeLocal: String {
         let dateFormatter = DateFormatter()
