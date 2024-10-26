@@ -72,7 +72,10 @@ struct HourlyForecast : Decodable {
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.dateFormat = "yyyyMMddHHmm"
         let date = dateFormatter.date(from:dateTimeUTC)!
-        return date.formatted(date: .omitted, time: .shortened)
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "h a"
+        return dateFormatter2.string(from: date).lowercased()
     }
     let temperature: Double
     let iconCode : Int
