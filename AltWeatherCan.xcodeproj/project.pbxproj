@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3762DE892CCD75D1005539C2 /* XMLCoder */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		3762DE712CCD7308005539C2 /* AltWeatherCan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltWeatherCan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = AltWeatherCan;
 			packageProductDependencies = (
+				3762DE892CCD75D1005539C2 /* XMLCoder */,
 			);
 			productName = AltWeatherCan;
 			productReference = 3762DE712CCD7308005539C2 /* AltWeatherCan.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 3762DE682CCD7308005539C2;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 3762DE722CCD7308005539C2 /* Products */;
 			projectDirPath = "";
@@ -324,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoreOffice/XMLCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.17.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3762DE892CCD75D1005539C2 /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */;
+			productName = XMLCoder;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3762DE692CCD7308005539C2 /* Project object */;
 }
