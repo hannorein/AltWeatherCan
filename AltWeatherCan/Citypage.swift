@@ -5,14 +5,29 @@
 //  Created by Hanno Rein on 2024-10-26.
 //
 
-import XMLCoder
 import Foundation
-import SwiftUI
 
 struct Wind : Decodable {
     let speed: Double
-    let gust: Double
+    let gust: Double?
     let direction: String
+    
+    enum CodingKeys: String, CodingKey {
+        case speed
+        case gust
+        case direction
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        speed = try values.decode(Double.self, forKey: .speed)
+        direction = try values.decode(String.self, forKey: .direction)
+        do {
+            gust = try values.decode(Double.self, forKey: .gust)
+        }catch {
+            gust = nil
+        }
+    }
 }
 
 struct CurrentConditions : Decodable {
@@ -75,23 +90,4 @@ struct Citypage : Decodable {
     var currentConditions: CurrentConditions? = nil
     var forecastGroup: ForecastGroup? = nil
     var hourlyForecastGroup: HourlyForecastGroup? = nil
-    
-    static func load() -> Citypage? {
-        let path = Bundle.main.path(forResource: "s0000458_e", ofType: "xml") // file path for file "data.txt"
-        let sourceXML = try! String(contentsOfFile: path!, encoding: String.Encoding.utf8)
-        do {
-            let citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
-            print(citypage)
-            return citypage
-        }catch {
-            print("error: \(error)")
-        }
-        return nil
-    }
-    
-}
-
-#Preview {
-    MainView()
-    
 }

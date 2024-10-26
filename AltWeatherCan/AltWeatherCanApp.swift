@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct AltWeatherCanApp: App {
+    @StateObject var appManager = AppManager()
     var body: some Scene {
         WindowGroup {
             MainView()
+                .environmentObject(appManager)
         }
     }
 }
