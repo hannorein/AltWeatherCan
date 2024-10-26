@@ -7,7 +7,33 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct HourlyForecastView: View {
+    let hourlyForecast : HourlyForecast
+    var body: some View {
+        HStack{
+            Image(hourlyForecast.iconName)
+                .resizable()
+                .frame(width: 30, height: 30)
+                .padding(.trailing, 5)
+            VStack(alignment: .leading){
+                Text(String(format:"000pm"))
+                    .font(.footnote)
+                Text(String(format:"%.0fºC", hourlyForecast.temperature))
+                    .bold()
+            }
+            .font(.footnote)
+        }
+        .padding(5)
+        .padding( .trailing, 25)
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .fill(.white)
+        )
+            
+    }
+}
+
+struct MainView: View {
     @State var citypage = Citypage.load()
     let colourTop = Color(red: 0.16, green: 0.33, blue: 0.66)
     let colourBottom = Color(red: 0.63, green: 0.76, blue: 0.95)
@@ -22,7 +48,7 @@ struct ContentView: View {
                     if let location = citypage.location {
                         Text(location.name)
                             .font(.headline)
-                            .padding(.bottom, 15)
+                            .padding(.bottom, 35)
                     }
                     HStack{
                         if let currentConditions = citypage.currentConditions {
@@ -30,7 +56,6 @@ struct ContentView: View {
                                 .resizable()
                                 .frame(width: 80, height: 80)
                                 .padding(.trailing, 15)
-                            
                             
                             VStack(alignment: .leading){
                                 Text(String(format:"%.0fºC", currentConditions.temperature))
@@ -43,6 +68,19 @@ struct ContentView: View {
                                     .font(.footnote)
                                 
                             }
+                        }
+                    }
+                    .padding(.bottom, 35)
+                    if let hourlyForecast = citypage.hourlyForecastGroup?.hourlyForecast {
+                        if hourlyForecast.count >= 3 {
+                            
+                            HStack(spacing:4){
+                                HourlyForecastView(hourlyForecast: hourlyForecast[0])
+                                HourlyForecastView(hourlyForecast: hourlyForecast[1])
+                                HourlyForecastView(hourlyForecast: hourlyForecast[2])
+                            }
+                            .foregroundStyle(.black)
+                            
                         }
                     }
                 } else {
@@ -62,5 +100,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    MainView()
 }
