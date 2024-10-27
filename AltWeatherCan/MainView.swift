@@ -9,13 +9,22 @@ import SwiftUI
 
 struct MainView : View {
     @EnvironmentObject var appManager : AppManager
-
+    @State var locationScreenShown : Bool = false
     var body: some View {
         VStack{
             if let citypage = appManager.citypage {
                 
-                Text("\(citypage.location.name), \(citypage.location.province)")
-                    .font(.headline)
+                HStack{
+                    Text("\(citypage.location.name), \(citypage.location.province)")
+                        .font(.title)
+                    Image("search25x25")
+                        .renderingMode(.template)
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                }
+                .onTapGesture {
+                    locationScreenShown.toggle()
+                }
                 ForEach(citypage.warnings.event) { event in
                     let type = event.type.lowercased()
                     HStack {
@@ -61,6 +70,9 @@ struct MainView : View {
         }
         .foregroundStyle(.white)
         .background(colourTop)
+        .fullScreenCover(isPresented: $locationScreenShown) {
+            LocationView(locationScreenShown: $locationScreenShown)
+        }
     }
 }
 

@@ -107,6 +107,7 @@ struct SevenDayView : View {
                     Spacer()
                     Text("Data Source: Environment and Climate Change Canada")
                         .font(.footnote)
+                        .padding(.vertical, 4)
                 } else{
                     Text("No data available.")
                 }
