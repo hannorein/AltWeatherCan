@@ -46,7 +46,6 @@ struct NowView: View {
             Spacer()
             VStack {
                 if let citypage = appManager.citypage {
-                    let location = citypage.location
                     HStack{
                         let currentConditions = citypage.currentConditions
                         Image(currentConditions.iconName)

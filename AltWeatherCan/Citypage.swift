@@ -55,14 +55,21 @@ struct AbbreviatedForecast : Decodable {
     let textSummary: String
 }
 
-struct Forecast : Decodable {
+struct Temperatures : Decodable {
+    let temperature: Double
+    let textSummary : String
+}
+
+struct Forecast : Decodable, Identifiable {
+    let id = UUID()
     let period: String
     let textSummary: String
     let abbreviatedForecast: AbbreviatedForecast
+    let temperatures: Temperatures
 }
 
 struct ForecastGroup : Decodable {
-    let forecast: Forecast
+    let forecast: [Forecast]
 }
 
 struct HourlyForecast : Decodable, Identifiable {
