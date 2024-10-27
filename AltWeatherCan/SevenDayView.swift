@@ -16,7 +16,7 @@ struct SevenDayView : View {
             var forecasts = citypage.forecastGroup.forecast
             if let first = forecasts.first {
                 if first.period.localizedCaseInsensitiveContains("night"){
-                    forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(iconCode: 29, textSummary: ""), temperatures: Temperatures(temperature: Double.nan, textSummary: "-")), at: 0)
+                    forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(), temperatures: Temperatures(temperature: Double.nan, textSummary: "-")), at: 0)
                 }
             }
             return forecasts
@@ -39,7 +39,7 @@ struct SevenDayView : View {
                         let columns = [GridItem(.flexible())]
                         
                         ScrollView(.horizontal) {
-                            let rows = [GridItem(.fixed(20), spacing: 1), GridItem(.fixed(110), spacing: 1), GridItem(.fixed(110), spacing: 1)]
+                            let rows = [GridItem(.fixed(20), spacing: 1), GridItem(.fixed(115), spacing: 1), GridItem(.fixed(115), spacing: 1)]
                             
                             LazyHGrid(rows: rows, spacing: 1) {
                                 ForEach(Array(forecastsCleaned().enumerated()), id: \.offset) { index, forecast in
@@ -58,9 +58,15 @@ struct SevenDayView : View {
                                                 .resizable()
                                                 .frame(width:40, height: 40)
                                             Text(String(format: "%.0fºC", forecast.temperatures.temperature))
+                                            if let pop = forecast.abbreviatedForecast.pop {
+                                                Text(String(format: "%.0f%%", pop))
+                                                    .font(.caption2)
+                                            }
                                         }else{
-                                            Text("-")
-                                                .frame(width:40, height: 60)
+                                            Spacer()
+                                                .frame(width: 40, height: 40)
+                                            Text("---")
+                                                
                                         }
                                         Spacer()
                                     }
@@ -70,7 +76,7 @@ struct SevenDayView : View {
                                 }
                             }
                         }
-                        .frame(height:242)
+                        .frame(height:252)
                         .foregroundStyle(.black)
                         .clipShape(
                             RoundedRectangle(cornerRadius: appCornerRadius)

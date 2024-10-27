@@ -63,10 +63,12 @@ struct NowView: View {
             if let citypage = appManager.citypage {
                 HStack{
                     if let currentConditions = citypage.currentConditions {
-                        Image(currentConditions.iconName)
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .padding(.trailing, 15)
+                        if currentConditions.iconCode != 29 {
+                            Image(currentConditions.iconName)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .padding(.trailing, 15)
+                        }
                         
                         VStack(alignment: .leading){
                             if let temperature = currentConditions.temperature {

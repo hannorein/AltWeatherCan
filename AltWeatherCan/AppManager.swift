@@ -45,7 +45,7 @@ class AppManager : ObservableObject {
             DispatchQueue.main.async{
                 do {
                     self.citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
-                    print(self.citypage!)
+//                    print(self.citypage!)
                 } catch {
                     print("decoding error: \(error)")
                 }

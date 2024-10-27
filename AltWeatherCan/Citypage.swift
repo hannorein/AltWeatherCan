@@ -110,10 +110,31 @@ struct Location : Decodable {
 
 struct AbbreviatedForecast : Decodable {
     let iconCode : Int
+    var pop : Double?
     var iconName : String {
         return String(format: "%02d_main62x63", iconCode)
     }
     let textSummary: String
+    
+    enum CodingKeys: String, CodingKey {
+        case iconCode
+        case pop
+        case textSummary
+    }
+    init() {
+        iconCode = 29
+        pop = nil
+        textSummary = ""
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        iconCode = try values.decode(Int.self, forKey: .iconCode)
+        textSummary = try values.decode(String.self, forKey: .textSummary)
+        do {
+            pop = try values.decode(Double?.self, forKey: .pop)
+        }
+    }
 }
 
 struct Temperatures : Decodable {
