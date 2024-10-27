@@ -70,6 +70,7 @@ struct Forecast : Decodable, Identifiable {
 
 struct ForecastGroup : Decodable {
     let forecast: [Forecast]
+    let dateTime: [DateTime]
 }
 
 struct HourlyForecast : Decodable, Identifiable {
@@ -101,7 +102,7 @@ struct DateTime : Decodable {
     let name : String
     let UTCOffset : Int
     let timeStamp : String
-    
+    let textSummary : String
     var dateTimeLocal: String {
         if (UTCOffset != 0) {
             return "Error. Not UTC."
