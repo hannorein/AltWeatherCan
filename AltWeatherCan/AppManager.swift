@@ -21,7 +21,8 @@ class AppManager : ObservableObject {
     
     @Published var citypage : Citypage? = nil
     @Published var sites : [Site]? = nil
-    @Published var selectedSite = Site(code: "s0000458", name: "Toronto", province: "ON", latitude: 43.74, longitude: 79.37)
+//    @Published var selectedSite = Site(code: "s0000458", name: "Toronto", province: "ON", latitude: 43.74, longitude: 79.37)
+    @Published var selectedSite = Site(code: "s0000630", name: "Port Perry", province: "ON", latitude: 43.74, longitude: 79.37)
 
     init() {
         DispatchQueue.global().async {
@@ -34,6 +35,7 @@ class AppManager : ObservableObject {
     
     func refresh() async {
         do {
+            print("Getting https://dd.weather.gc.ca/citypage_weather/xml/"+selectedSite.province+"/"+selectedSite.code+"_e.xml")
             // Hardcoded Toronto URL
             let sourceXML = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/xml/"+selectedSite.province+"/"+selectedSite.code+"_e.xml")!)
             
@@ -75,7 +77,6 @@ class AppManager : ObservableObject {
                     }
                 }
                 self.sites = newSites
-                print("loaded \(self.sites?.count)")
             }
         }catch {
             print("download error: \(error)")

@@ -15,7 +15,7 @@ struct MainView : View {
             if let citypage = appManager.citypage {
                 
                 HStack{
-                    Text("\(citypage.location.name), \(citypage.location.province)")
+                    Text("\(citypage.location.name), \(citypage.location.province.code.uppercased())")
                         .font(.title)
                     Image("search25x25")
                         .renderingMode(.template)

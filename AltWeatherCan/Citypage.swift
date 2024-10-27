@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import XMLCoder
 
 struct Wind : Decodable {
     let speed: Double
@@ -30,21 +31,81 @@ struct Wind : Decodable {
     }
 }
 
+
 struct CurrentConditions : Decodable {
-    let temperature: Double
-    let dewpoint: Double
-    let pressure: Double
-    let wind: Wind
-    let condition: String
-    let iconCode : Int
+    let temperature: Double?
+    let dewpoint: Double?
+    let pressure: Double?
+    let relativeHumidity: Double?
+    let visibility: Double?
+    let wind: Wind?
+    let condition: String?
+    let station : String?
+    let iconCode : Int?
+    let dateTime : [DateTime]
     var iconName : String {
-        return String(format: "%02d_main62x63", iconCode)
+        if let iconCode {
+            return String(format: "%02d_main62x63", iconCode)
+        }else{
+            return "29_main62x63"
+        }
+        
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case temperature
+        case dewpoint
+        case pressure
+        case relativeHumidity
+        case visibility
+        case wind
+        case station
+        case condition
+        case dateTime
+        case iconCode
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        temperature = try values.decode(Double?.self, forKey: .temperature)
+        dewpoint = try values.decode(Double?.self, forKey: .dewpoint)
+        pressure = try values.decode(Double?.self, forKey: .pressure)
+        relativeHumidity = try values.decode(Double?.self, forKey: .relativeHumidity)
+        visibility = try values.decode(Double?.self, forKey: .visibility)
+        wind = try values.decode(Wind?.self, forKey: .wind)
+        condition = try values.decode(String?.self, forKey: .condition)
+        station = try values.decode(String?.self, forKey: .station)
+        dateTime = try values.decode([DateTime].self, forKey: .dateTime)
+        do {
+            iconCode = try values.decode(Int.self, forKey: .iconCode)
+        }catch {
+            iconCode = 29 // N/A icon.
+        }
+    }
+}
+
+struct Province: Decodable, DynamicNodeEncoding {
+    let code: String
+    let name: String
+
+    enum CodingKeys: String, CodingKey {
+        case code
+        case name = ""
+    }
+
+    static func nodeEncoding(for key: any CodingKey) -> XMLCoder.XMLEncoder.NodeEncoding {
+        switch key {
+        case CodingKeys.code:
+            return .attribute
+        default:
+            return .element
+        }
     }
 }
 
 struct Location : Decodable {
     let name: String
-    let province: String
+    let province: Province
 }
 
 struct AbbreviatedForecast : Decodable {
@@ -138,7 +199,7 @@ struct Warnings : Decodable {
 struct Citypage : Decodable {
     let warnings: Warnings
     let location: Location
-    let currentConditions: CurrentConditions
+    let currentConditions: CurrentConditions?
     let forecastGroup: ForecastGroup
     let hourlyForecastGroup: HourlyForecastGroup
     let riseSet : RiseSet
