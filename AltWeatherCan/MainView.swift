@@ -37,6 +37,7 @@ struct MainView: View {
     @EnvironmentObject var appManager : AppManager
     let colourTop = Color(red: 0.16, green: 0.33, blue: 0.66)
     let colourBottom = Color(red: 0.63, green: 0.76, blue: 0.95)
+    let colourIcons = Color(red: 0.20, green: 0.30, blue: 0.48)
     var currentTimeZoneShort : String { // There is probably a better way to do this.
         let dateFormatter2 = DateFormatter()
         dateFormatter2.dateFormat = "zzz"
@@ -84,10 +85,51 @@ struct MainView: View {
                     }
                     let sunset = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunset" })
                     let sunrise = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunrise" })
-                                                                 
-                    if let sunrise, let sunset {
-                        Text("Sunrise \(sunrise.dateTimeLocal) - \(sunset.dateTimeLocal) \(currentTimeZoneShort)")
+                       
+                    VStack(alignment: .leading){
+                        HStack{
+                            Image("sunriseWhite18x11")
+                                .colorMultiply(colourIcons)
+                                .frame(width: 16, height: 16)
+                            Text("Sunrise - Sunset")
+                            Spacer()
+                            if let sunrise, let sunset {
+                                Text("\(sunrise.dateTimeLocal) - \(sunset.dateTimeLocal) \(currentTimeZoneShort)")
+                            }
+                        }
+                        .padding(.top, 5)
+                        .padding(.horizontal, 5)
+                        Divider()
+                            .frame(height:4)
+                        HStack{
+                            Image("dewpointWhite15x18")
+                                .colorMultiply(colourIcons)
+                                .frame(width: 16, height: 16)
+                            Text("Dew point")
+                            Spacer()
+                            Text(String(format: "%0.fºC", citypage.currentConditions.dewpoint))
+                        }
+                        .padding(.horizontal, 5)
+                        Divider()
+                            .frame(height:4)
+                        HStack{
+                            Image("pressureWhite18x16")
+                                .colorMultiply(colourIcons)
+                                .frame(width: 16, height: 16)
+                            Text("Pressure")
+                            Spacer()
+                            Text(String(format: "%0.1f kPa", citypage.currentConditions.pressure))
+                        }
+                        .padding(.horizontal, 5)
+                        .padding(.bottom, 5)
                     }
+                    .foregroundStyle(.black)
+                    .font(.footnote)
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(.white)
+                    )
                     
                 } else {
                     Text("No weather data available.")
