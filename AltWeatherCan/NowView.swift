@@ -33,7 +33,7 @@ struct HourlyForecastView: View {
     }
 }
 
-struct MainView: View {
+struct NowView: View {
     @EnvironmentObject var appManager : AppManager
     let colourTop = Color(red: 0.16, green: 0.33, blue: 0.66)
     let colourBottom = Color(red: 0.63, green: 0.76, blue: 0.95)
@@ -164,7 +164,7 @@ struct MainView: View {
 
 #Preview {
     let appManager = AppManager()
-    MainView()
+    NowView()
         .environmentObject(appManager)
     
 }
