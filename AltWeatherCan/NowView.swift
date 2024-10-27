@@ -35,9 +35,6 @@ struct HourlyForecastView: View {
 
 struct NowView: View {
     @EnvironmentObject var appManager : AppManager
-    let colourTop = Color(red: 0.16, green: 0.33, blue: 0.66)
-    let colourBottom = Color(red: 0.63, green: 0.76, blue: 0.95)
-    let colourIcons = Color(red: 0.20, green: 0.30, blue: 0.48)
     var currentTimeZoneShort : String { // There is probably a better way to do this.
         let dateFormatter2 = DateFormatter()
         dateFormatter2.dateFormat = "zzz"
@@ -50,24 +47,6 @@ struct NowView: View {
             VStack {
                 if let citypage = appManager.citypage {
                     let location = citypage.location
-                    Text("\(location.name), \(location.province)")
-                        .font(.headline)
-                        .padding(.bottom, 35)
-                    ForEach(citypage.warnings.event) { event in
-                        let type = event.type.lowercased()
-                        if let timeDate = event.dateTime.first(where: {$0.UTCOffset == 0}) {
-                            HStack {
-                                Image("warningTriangle24x24")
-                                Spacer()
-                                Text(event.description.capitalized)
-                                Spacer()
-                                Image("detailDisclosure25x25")
-                                    .colorInvert()
-                            }
-                            .padding(5)
-                            .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
-                        }
-                    }
                     HStack{
                         let currentConditions = citypage.currentConditions
                         Image(currentConditions.iconName)
@@ -153,7 +132,6 @@ struct NowView: View {
                 Text("Data Source: Environment and Climate Change Canada")
                     .font(.footnote)
             }
-            .foregroundStyle(.white)
             Spacer()
         }
         .background(
@@ -165,6 +143,7 @@ struct NowView: View {
 #Preview {
     let appManager = AppManager()
     NowView()
+        .foregroundStyle(.white)
         .environmentObject(appManager)
     
 }

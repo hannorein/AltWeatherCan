@@ -7,40 +7,20 @@
 
 import SwiftUI
 
+
+let colourTop = Color(red: 0.16, green: 0.33, blue: 0.66)
+let colourBottom = Color(red: 0.63, green: 0.76, blue: 0.95)
+let colourIcons = Color(red: 0.20, green: 0.30, blue: 0.48)
+
+
 @main
 struct AltWeatherCanApp: App {
     @StateObject var appManager = AppManager()
     var body: some Scene {
         WindowGroup {
-            TabView {
-                NowView()
-                    .tabItem {
-                        Text("NOW")
-                        Image("now24x24")
-                            .renderingMode(.template)
-
-                    }
-                HourlyView()
-                    .tabItem {
-                        Text("HOURLY")
-                        Image("hourly24x24")
-                            .renderingMode(.template)
-                    }
-                Text("7 Day View")
-                    .tabItem {
-                        Text("7 DAY")
-                        Image("7day24x24")
-                            .renderingMode(.template)
-                    }
-            }
-            .accentColor(Color(red: 0.17, green: 0.29, blue: 0.93))
-            .onAppear() {
-                let tabBarAppearance = UITabBarAppearance()
-                tabBarAppearance.backgroundColor = .white
-                UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-                UITabBar.appearance().standardAppearance = tabBarAppearance
-            }
+            MainView()
             .environmentObject(appManager)
         }
     }
 }
+
