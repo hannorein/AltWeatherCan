@@ -28,14 +28,16 @@ struct LocationView : View {
         NavigationStack{
             List{
                 ForEach(searchResults, id: \.self) { site in
-                    Text("\(site.name), \(site.province)")
-                        .onTapGesture {
-                            appManager.selectedSite = site
-                            Task {
-                                await appManager.refresh()
-                            }
-                            locationScreenShown = false
+                    Button {
+                        appManager.selectedSite = site
+                        Task {
+                            await appManager.refresh()
                         }
+                        locationScreenShown = false
+                    } label: {
+                        Text("\(site.name), \(site.province)")
+                            .tint(.black)
+                    }
                 }
             }
             .background(colourTop)
