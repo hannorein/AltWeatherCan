@@ -114,7 +114,21 @@ struct RiseSet : Decodable {
     let dateTime : [DateTime]
 }
 
+struct Event : Decodable, Identifiable {
+    let id = UUID()
+    let type : String
+    let url : String
+    let description : String
+    let priority : String
+    let dateTime : [DateTime]
+}
+
+struct Warnings : Decodable {
+    let event: [Event]
+}
+
 struct Citypage : Decodable {
+    let warnings: Warnings
     let location: Location
     let currentConditions: CurrentConditions
     let forecastGroup: ForecastGroup

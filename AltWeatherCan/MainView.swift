@@ -53,6 +53,21 @@ struct MainView: View {
                     Text("\(location.name), \(location.province)")
                         .font(.headline)
                         .padding(.bottom, 35)
+                    ForEach(citypage.warnings.event) { event in
+                        let type = event.type.lowercased()
+                        if let timeDate = event.dateTime.first(where: {$0.UTCOffset == 0}) {
+                            HStack {
+                                Image("warningTriangle24x24")
+                                Spacer()
+                                Text(event.description.capitalized)
+                                Spacer()
+                                Image("detailDisclosure25x25")
+                                    .colorInvert()
+                            }
+                            .padding(5)
+                            .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
+                        }
+                    }
                     HStack{
                         let currentConditions = citypage.currentConditions
                         Image(currentConditions.iconName)
@@ -83,8 +98,6 @@ struct MainView: View {
                     }
                         .foregroundStyle(.black)
                     }
-                    let sunset = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunset" })
-                    let sunrise = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunrise" })
                        
                     VStack(alignment: .leading){
                         HStack{
@@ -93,6 +106,8 @@ struct MainView: View {
                                 .frame(width: 16, height: 16)
                             Text("Sunrise - Sunset")
                             Spacer()
+                            let sunset = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunset" })
+                            let sunrise = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunrise" })
                             if let sunrise, let sunset {
                                 Text("\(sunrise.dateTimeLocal) - \(sunset.dateTimeLocal) \(currentTimeZoneShort)")
                             }
