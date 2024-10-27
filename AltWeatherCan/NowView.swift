@@ -26,7 +26,7 @@ struct HourlyForecastView: View {
         .padding(5)
         .padding( .trailing, 15)
         .background(
-            RoundedRectangle(cornerRadius: 4)
+            RoundedRectangle(cornerRadius: appCornerRadius)
                 .fill(.white)
         )
         
@@ -42,97 +42,99 @@ struct NowView: View {
     }
     
     var body: some View {
-        HStack{
-            Spacer()
-            VStack {
-                if let citypage = appManager.citypage {
-                    HStack{
-                        let currentConditions = citypage.currentConditions
-                        Image(currentConditions.iconName)
-                            .resizable()
-                            .frame(width: 80, height: 80)
-                            .padding(.trailing, 15)
+            ScrollView(.vertical){
+                VStack {
+                    if let citypage = appManager.citypage {
+                        HStack{
+                            let currentConditions = citypage.currentConditions
+                            Image(currentConditions.iconName)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .padding(.trailing, 15)
+                            
+                            VStack(alignment: .leading){
+                                Text(String(format:"%.0fºC", currentConditions.temperature))
+                                    .font(.largeTitle)
+                                Text(currentConditions.condition)
+                                    .bold()
+                                Text(String(format:"Wind: \(currentConditions.wind.direction) %.0f km/h", currentConditions.temperature))
+                                    .font(.footnote)
+                                if let gust = currentConditions.wind.gust {
+                                    Text(String(format:"Gusts: %.0f km/h", gust))
+                                        .font(.footnote)
+                                }
+                            }
+                        }
+                        .padding(.bottom, 35)
+                        let hourlyForecast = citypage.hourlyForecastGroup.hourlyForecast
+                        ScrollView(.horizontal) {
+                            HStack (spacing: 4){
+                                ForEach(hourlyForecast) { forecast in
+                                    HourlyForecastView(hourlyForecast: forecast)
+                                }
+                            }
+                            .foregroundStyle(.black)
+                        }
                         
                         VStack(alignment: .leading){
-                            Text(String(format:"%.0fºC", currentConditions.temperature))
-                                .font(.largeTitle)
-                            Text(currentConditions.condition)
-                                .bold()
-                            Text(String(format:"Wind: \(currentConditions.wind.direction) %.0f km/h", currentConditions.temperature))
-                                .font(.footnote)
-                            if let gust = currentConditions.wind.gust {
-                                Text(String(format:"Gusts: %.0f km/h", gust))
-                                    .font(.footnote)
+                            HStack{
+                                Image("sunriseWhite18x11")
+                                    .colorMultiply(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Sunrise - Sunset")
+                                Spacer()
+                                let sunset = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunset" })
+                                let sunrise = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunrise" })
+                                if let sunrise, let sunset {
+                                    Text("\(sunrise.dateTimeLocal) - \(sunset.dateTimeLocal) \(currentTimeZoneShort)")
+                                }
                             }
+                            .padding(.top, 5)
+                            .padding(.horizontal, 5)
+                            Divider()
+                                .frame(height:4)
+                            HStack{
+                                Image("dewpointWhite15x18")
+                                    .colorMultiply(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Dew point")
+                                Spacer()
+                                Text(String(format: "%0.fºC", citypage.currentConditions.dewpoint))
+                            }
+                            .padding(.horizontal, 5)
+                            Divider()
+                                .frame(height:4)
+                            HStack{
+                                Image("pressureWhite18x16")
+                                    .colorMultiply(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Pressure")
+                                Spacer()
+                                Text(String(format: "%0.1f kPa", citypage.currentConditions.pressure))
+                            }
+                            .padding(.horizontal, 5)
+                            .padding(.bottom, 5)
                         }
-                    }
-                    .padding(.bottom, 35)
-                    let hourlyForecast = citypage.hourlyForecastGroup.hourlyForecast
-                    ScrollView(.horizontal) {
-                        HStack (spacing: 4){
-                        ForEach(hourlyForecast) { forecast in
-                            HourlyForecastView(hourlyForecast: forecast)
-                        }
-                    }
                         .foregroundStyle(.black)
+                        .font(.footnote)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: appCornerRadius)
+                                .fill(.white)
+                        )
+                        
+                    } else {
+                        Text("No weather data available.")
                     }
-                       
-                    VStack(alignment: .leading){
-                        HStack{
-                            Image("sunriseWhite18x11")
-                                .colorMultiply(colourIcons)
-                                .frame(width: 16, height: 16)
-                            Text("Sunrise - Sunset")
-                            Spacer()
-                            let sunset = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunset" })
-                            let sunrise = citypage.riseSet.dateTime.first(where: { $0.UTCOffset == 0 && $0.name == "sunrise" })
-                            if let sunrise, let sunset {
-                                Text("\(sunrise.dateTimeLocal) - \(sunset.dateTimeLocal) \(currentTimeZoneShort)")
-                            }
-                        }
-                        .padding(.top, 5)
-                        .padding(.horizontal, 5)
-                        Divider()
-                            .frame(height:4)
-                        HStack{
-                            Image("dewpointWhite15x18")
-                                .colorMultiply(colourIcons)
-                                .frame(width: 16, height: 16)
-                            Text("Dew point")
-                            Spacer()
-                            Text(String(format: "%0.fºC", citypage.currentConditions.dewpoint))
-                        }
-                        .padding(.horizontal, 5)
-                        Divider()
-                            .frame(height:4)
-                        HStack{
-                            Image("pressureWhite18x16")
-                                .colorMultiply(colourIcons)
-                                .frame(width: 16, height: 16)
-                            Text("Pressure")
-                            Spacer()
-                            Text(String(format: "%0.1f kPa", citypage.currentConditions.pressure))
-                        }
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 5)
-                    }
-                    .foregroundStyle(.black)
-                    .font(.footnote)
-                    .frame(maxWidth: .infinity)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(.white)
-                    )
-                    
-                } else {
-                    Text("No weather data available.")
+                    Spacer()
+                    Text("Data Source: Environment and Climate Change Canada")
+                        .font(.footnote)
                 }
-                Spacer()
-                Text("Data Source: Environment and Climate Change Canada")
-                    .font(.footnote)
             }
-            Spacer()
-        }
+            .refreshable {
+                await appManager.refresh()
+            }
+            .padding(5)
         .background(
             LinearGradient(gradient: Gradient(colors: [colourTop, colourTop, colourBottom]), startPoint: .top, endPoint: .bottom)
         )

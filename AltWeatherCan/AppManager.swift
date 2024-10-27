@@ -14,6 +14,14 @@ class AppManager : ObservableObject {
     
     init() {
         DispatchQueue.global().async {
+            Task {
+                await self.refresh()
+            }
+        }
+    }
+    
+    func refresh() async {
+        
             do {
                 // Hardcoded Toronto URL
                 let sourceXML = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/xml/ON/s0000458_e.xml")!)
@@ -32,6 +40,6 @@ class AppManager : ObservableObject {
             }catch {
                 print("download error: \(error)")
             }
-        }
+        
     }
 }
