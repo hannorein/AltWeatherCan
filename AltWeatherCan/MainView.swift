@@ -10,6 +10,8 @@ import SwiftUI
 struct MainView : View {
     @EnvironmentObject var appManager : AppManager
     @State var locationScreenShown : Bool = false
+    let timer = Timer.publish(every: 60*5, on: .main, in: .common).autoconnect()
+
     var body: some View {
         VStack{
             if let citypage = appManager.citypage {
@@ -92,6 +94,11 @@ struct MainView : View {
         .background(colourTop)
         .fullScreenCover(isPresented: $locationScreenShown) {
             LocationView(locationScreenShown: $locationScreenShown)
+        }
+        .onReceive(timer) { input in
+            Task {
+                await appManager.refresh()
+            }
         }
     }
 }

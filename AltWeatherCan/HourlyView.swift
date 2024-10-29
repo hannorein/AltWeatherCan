@@ -28,24 +28,7 @@ struct HourlyView : View {
                         LazyVGrid(columns: columns, spacing: 1) {
                             ForEach(Array(citypage.hourlyForecastGroup.hourlyForecast.enumerated()), id: \.offset) { index, forecast in
                                 if index == 0 || forecast.dateTimeNewDay {
-                                    Rectangle()
-                                        .fill(.clear)
-                                        .frame(height: 4)
-                                        .padding(0)
-                                    HStack{
-                                        Text(forecast.dateTimeLocal2)
-                                            .padding(5)
-                                            .font(.footnote)
-                                            .bold()
-                                        Spacer()
-                                    }
-                                    .background(.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: 3))
-                                    Rectangle()
-                                        .fill(.clear)
-                                        .frame(height: 1)
-                                        .padding(0)
-                                   
+                                    TitleRow(title: forecast.dateTimeLocal2)
                                 }
                                 VStack{
                                     HStack{
