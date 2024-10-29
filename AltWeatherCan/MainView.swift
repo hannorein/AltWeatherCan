@@ -38,6 +38,18 @@ struct MainView : View {
                     .padding(5)
                     .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
                 }
+            }else{
+                HStack{
+                    Text("No location selected")
+                        .font(.title)
+                    Image("search25x25")
+                        .renderingMode(.template)
+                        .resizable()
+                        .frame(width: 28, height: 28)
+                }
+                .onTapGesture {
+                    locationScreenShown.toggle()
+                }
             }
             TabView {
                 NowView()

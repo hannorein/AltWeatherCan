@@ -15,6 +15,8 @@ struct HourlyView : View {
                 Spacer()
                 Text("Data Source: Environment and Climate Change Canada")
                     .font(.footnote)
+                    .padding(.vertical, 4)
+
             }
             Spacer()
         }

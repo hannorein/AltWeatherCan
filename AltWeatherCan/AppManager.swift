@@ -76,7 +76,9 @@ class AppManager : ObservableObject {
                         newSites.append(site)
                     }
                 }
-                self.sites = newSites
+                self.sites = newSites.sorted(by: { a, b in
+                    a.name < b.name
+                })
             }
         }catch {
             print("download error: \(error)")

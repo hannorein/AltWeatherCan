@@ -68,6 +68,11 @@ struct NowView: View {
                                 .resizable()
                                 .frame(width: 80, height: 80)
                                 .padding(.trailing, 15)
+                        }else if let iconName = citypage.hourlyForecastGroup.hourlyForecast.first?.iconName{
+                            Image(iconName)
+                                .resizable()
+                                .frame(width: 80, height: 80)
+                                .padding(.trailing, 15)
                         }
                         
                         VStack(alignment: .leading){
@@ -171,6 +176,8 @@ struct NowView: View {
             Spacer()
             Text("Data Source: Environment and Climate Change Canada")
                 .font(.footnote)
+                .padding(.top, 40)
+                .padding(.bottom, 4)
         }
         .refreshable {
             await appManager.refresh()
