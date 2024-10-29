@@ -27,16 +27,18 @@ struct MainView : View {
                 }
                 ForEach(citypage.warnings.event) { event in
                     let type = event.type.lowercased()
-                    HStack {
-                        Image("warningTriangle24x24")
-                        Spacer()
-                        Text(event.description.capitalized)
-                        Spacer()
-                        Image("detailDisclosure25x25")
-                            .colorInvert()
+                    Link(destination: URL(string: event.url)!) {
+                        HStack {
+                            Image("warningTriangle24x24")
+                            Spacer()
+                            Text(event.description.capitalized)
+                            Spacer()
+                            Image("detailDisclosure25x25")
+                                .colorInvert()
+                        }
+                        .padding(5)
+                        .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
                     }
-                    .padding(5)
-                    .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
                 }
             }else{
                 HStack{
@@ -69,6 +71,12 @@ struct MainView : View {
                     .tabItem {
                         Text("7 DAY")
                         Image("7day24x24")
+                            .renderingMode(.template)
+                    }
+                AboutView()
+                    .tabItem {
+                        Text("ABOUT")
+                        Image("outline_info_black_24pt24x24")
                             .renderingMode(.template)
                     }
             }

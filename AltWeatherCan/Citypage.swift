@@ -168,8 +168,35 @@ struct HourlyForecast : Decodable, Identifiable {
         dateFormatter2.dateFormat = "h a"
         return dateFormatter2.string(from: date).lowercased()
     }
+    var dateTimeLocal2: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddHHmm"
+        let date = dateFormatter.date(from:dateTimeUTC)!
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "EEEE d MMMM y"
+        return dateFormatter2.string(from: date)
+    }
+    var dateTimeNewDay: Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddHHmm"
+        let date = dateFormatter.date(from:dateTimeUTC)!
+        
+        let dateFormatter2 = DateFormatter()
+        dateFormatter2.dateFormat = "H"
+        return dateFormatter2.string(from: date) == "0"
+    }
     let temperature: Double
+    let condition : String
     let iconCode : Int
+    let lop : Double
+    let humindex : Double?
+    let wind : Wind
+    var isNight : Bool {
+        return iconCode >= 30 && iconCode <= 39 // Probably not always correct. Should check for sunset
+    }
     var iconName : String {
         return String(format: "%02d_main62x63", iconCode)
     }
