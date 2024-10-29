@@ -8,8 +8,8 @@
 import Foundation
 import XMLCoder
 
-struct Site : Identifiable, Hashable {
-    let id = UUID()
+struct Site : Identifiable, Hashable, Codable {
+    var id = UUID()
     let code : String
     let name : String
     let province : String
@@ -26,6 +26,12 @@ class AppManager : ObservableObject {
     @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37)
     
     init() {
+        let defaults = UserDefaults.standard
+        if let contentData = defaults.object(forKey: "defaultSite") as? Data,
+            let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
+            selectedSite = defaultSite
+        }
+       
         DispatchQueue.global().async {
             Task {
                 await self.refreshSiteList()
@@ -36,13 +42,19 @@ class AppManager : ObservableObject {
     
     func refresh() async {
         do {
-            print("Getting https://dd.weather.gc.ca/citypage_weather/xml/"+selectedSite.province+"/"+selectedSite.code+"_e.xml")
-            let sourceXML = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/xml/"+selectedSite.province+"/"+selectedSite.code+"_e.xml")!)
+            
+            let stationUrl = "https://dd.weather.gc.ca/citypage_weather/xml/"+selectedSite.province+"/"+selectedSite.code+"_e.xml"
+            print("Getting \(stationUrl)")
+            let sourceXML = try String(contentsOf: URL(string: stationUrl)!)
             
             DispatchQueue.main.async{
                 do {
                     self.citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
-//                    print(self.citypage!)
+                    // On success only, store site in UserDefaults
+                    let defaults = UserDefaults.standard
+                    if let contentData = try? JSONEncoder().encode(self.selectedSite) {
+                        defaults.set(contentData, forKey: "defaultSite")
+                    }
                 } catch {
                     print("decoding error: \(error)")
                 }
