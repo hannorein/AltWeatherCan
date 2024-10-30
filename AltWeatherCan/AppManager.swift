@@ -65,7 +65,6 @@ class AppManager : ObservableObject {
     }
     
     func refreshSiteList() async {
-        
         do {
             let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv")!)
             DispatchQueue.main.async{
@@ -92,7 +91,5 @@ class AppManager : ObservableObject {
         }catch {
             print("download error: \(error)")
         }
-        
-        
     }
 }

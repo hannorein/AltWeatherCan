@@ -137,6 +137,7 @@ struct SevenDayView : View {
                         .padding(.vertical, 4)
                 } else{
                     Text("No data available.")
+                    Spacer()
                 }
             }
             Spacer()

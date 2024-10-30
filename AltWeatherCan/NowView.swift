@@ -169,15 +169,15 @@ struct NowView: View {
                             .fill(.white)
                     )
                 }
-                
+                Spacer()
+                Text("Data Source: Environment and Climate Change Canada")
+                    .font(.footnote)
+                    .padding(.top, 40)
+                    .padding(.bottom, 4)
             } else {
                 Text("No weather data available.")
+                    .frame(maxWidth: .infinity)
             }
-            Spacer()
-            Text("Data Source: Environment and Climate Change Canada")
-                .font(.footnote)
-                .padding(.top, 40)
-                .padding(.bottom, 4)
         }
         .refreshable {
             await appManager.refresh()
