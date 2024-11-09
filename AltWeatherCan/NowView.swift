@@ -84,7 +84,7 @@ struct NowView: View {
                                 Text(condition)
                                     .bold()
                             }else{
-                                Text("Current condition not reported.")
+                                Text("Current conditions not reported.")
                                     .bold()
                             }
                             if let windChill = currentConditions.windChill {

@@ -157,6 +157,14 @@ struct Forecast : Decodable, Identifiable {
     let abbreviatedForecast: AbbreviatedForecast
     let temperatures: Temperatures
     let windChill: WindChill?
+    
+    enum CodingKeys: String, CodingKey {
+        case period
+        case textSummary
+        case abbreviatedForecast
+        case temperatures
+        case windChill
+    }
 }
 
 struct ForecastGroup : Decodable {
@@ -290,6 +298,14 @@ struct Event : Decodable, Identifiable {
     let description : String
     let priority : String
     let dateTime : [DateTime]
+    
+    enum CodingKeys: String, CodingKey {
+        case type
+        case url
+        case description
+        case priority
+        case dateTime
+    }
 }
 
 struct Warnings : Decodable {

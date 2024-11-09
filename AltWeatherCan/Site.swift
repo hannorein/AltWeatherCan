@@ -17,7 +17,7 @@ struct Site : Identifiable, Hashable, Codable {
     static func getAvailableSites() -> [Site] {
         var newSites: [Site] = []
         do {
-            let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv")!)
+            let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv")!, encoding: .utf8)
                 var rows = sourceCSV.components(separatedBy: "\n")
 
                 rows.removeFirst()

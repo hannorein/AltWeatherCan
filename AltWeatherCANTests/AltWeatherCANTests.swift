@@ -25,6 +25,9 @@ struct AltWeatherCANTests {
             let sourceXML = try String(contentsOf: URL(string: stationUrl)!, encoding: .utf8)
             
             let citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
+            if citypage.currentConditions == nil {
+                print("No current conditions found.")
+            }
         }
     }
 
