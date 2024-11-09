@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37136AB42CE0031600A74186 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 37136AB32CE0031600A74186 /* XMLCoder */; };
 		3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3762DE892CCD75D1005539C2 /* XMLCoder */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		37136AB02CE0012E00A74186 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCANTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Citypage.swift,
+				Site.swift,
+			);
+			target = 37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */;
+		};
 		378F01FF2CD16B0B00BA7274 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCAN" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -45,6 +54,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				378F01FF2CD16B0B00BA7274 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCAN" target */,
+				37136AB02CE0012E00A74186 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCANTests" target */,
 			);
 			path = AltWeatherCan;
 			sourceTree = "<group>";
@@ -56,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37136AB42CE0031600A74186 /* XMLCoder in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,11 +81,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37136AB22CE0031600A74186 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3762DE682CCD7308005539C2 = {
 			isa = PBXGroup;
 			children = (
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
 				37136AA52CDFFE9E00A74186 /* AltWeatherCANTests */,
+				37136AB22CE0031600A74186 /* Frameworks */,
 				3762DE722CCD7308005539C2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -109,6 +128,7 @@
 			);
 			name = AltWeatherCANTests;
 			packageProductDependencies = (
+				37136AB32CE0031600A74186 /* XMLCoder */,
 			);
 			productName = AltWeatherCANTests;
 			productReference = 37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */;
@@ -487,6 +507,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		37136AB32CE0031600A74186 /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */;
+			productName = XMLCoder;
+		};
 		3762DE892CCD75D1005539C2 /* XMLCoder */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */;
