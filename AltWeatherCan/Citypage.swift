@@ -248,7 +248,7 @@ struct HourlyForecastGroup : Decodable {
 
 struct DateTime : Decodable {
     let name : String
-    let UTCOffset : Int
+    let UTCOffset : Double
     let timeStamp : String
     let textSummary : String
     var dateTimeLocal: String {
@@ -271,7 +271,7 @@ struct RiseSet : Decodable {
 }
 
 struct Event : Decodable, Identifiable {
-    let id = UUID()
+    var id = UUID()
     let type : String
     let url : String
     let description : String
