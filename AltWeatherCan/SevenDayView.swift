@@ -16,7 +16,7 @@ struct SevenDayView : View {
             var forecasts = citypage.forecastGroup.forecast
             if let first = forecasts.first {
                 if first.period.localizedCaseInsensitiveContains("night"){
-                    forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(), temperatures: Temperatures(temperature: Double.nan, textSummary: "-")), at: 0)
+                    forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(), temperatures: Temperatures(temperature: Double.nan, textSummary: "-"), windChill: nil), at: 0)
                 }
             }
             return forecasts

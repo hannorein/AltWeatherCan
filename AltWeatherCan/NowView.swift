@@ -87,6 +87,10 @@ struct NowView: View {
                                 Text("Current condition not reported.")
                                     .bold()
                             }
+                            if let windChill = currentConditions.windChill {
+                                Text(String(format:"Feels like: %.0f km/h", windChill))
+                                    .font(.footnote)
+                            }
                             if let wind = currentConditions.wind {
                                 Text(String(format:"Wind: \(wind.direction) %.0f km/h", wind.speed))
                                     .font(.footnote)
@@ -95,7 +99,6 @@ struct NowView: View {
                                         .font(.footnote)
                                 }
                             }
-                            
                         }
                     }
                 }

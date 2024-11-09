@@ -46,8 +46,10 @@ struct HourlyView : View {
                                             .bold()
                                         VStack (alignment: .leading){
                                             Text(forecast.condition)
-                                            if let humindex = forecast.humindex {
-                                                Text("Feels like: ").bold() + Text(String(format: " %.0fºC", humindex))
+                                            if let humidex = forecast.humidex {
+                                                Text("Feels like: ").bold() + Text(String(format: " %.0fºC", humidex))
+                                            }else if let windChill = forecast.windChill {
+                                                Text("Feels like: ").bold() + Text(String(format: " %.0fºC", windChill))
                                             }
                                             Text("Wind: ").bold() + Text(forecast.wind.direction) + Text(String(format: " %.0f km/h", forecast.wind.speed))
                                             if let gust = forecast.wind.gust {

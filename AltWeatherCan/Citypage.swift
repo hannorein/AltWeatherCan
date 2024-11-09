@@ -38,6 +38,7 @@ struct CurrentConditions : Decodable {
     let pressure: Double?
     let relativeHumidity: Double?
     let visibility: Double?
+    let windChill: Double?
     let wind: Wind?
     let condition: String?
     let station : String?
@@ -58,6 +59,7 @@ struct CurrentConditions : Decodable {
         case pressure
         case relativeHumidity
         case visibility
+        case windChill
         case wind
         case station
         case condition
@@ -72,6 +74,7 @@ struct CurrentConditions : Decodable {
         pressure = try values.decode(Double?.self, forKey: .pressure)
         relativeHumidity = try values.decode(Double?.self, forKey: .relativeHumidity)
         visibility = try values.decode(Double?.self, forKey: .visibility)
+        windChill = try values.decode(Double?.self, forKey: .windChill)
         wind = try values.decode(Wind?.self, forKey: .wind)
         condition = try values.decode(String?.self, forKey: .condition)
         station = try values.decode(String?.self, forKey: .station)
@@ -142,12 +145,18 @@ struct Temperatures : Decodable {
     let textSummary : String
 }
 
+struct WindChill : Decodable{
+    var textSummary: String? = nil
+    //var calculated: Double? = nil
+}
+
 struct Forecast : Decodable, Identifiable {
     let id = UUID()
     let period: String
     let textSummary: String
     let abbreviatedForecast: AbbreviatedForecast
     let temperatures: Temperatures
+    let windChill: WindChill?
 }
 
 struct ForecastGroup : Decodable {
@@ -192,8 +201,38 @@ struct HourlyForecast : Decodable, Identifiable {
     let condition : String
     let iconCode : Int
     let lop : Double
-    let humindex : Double?
+    let windChill : Double?
+    let humidex : Double?
     let wind : Wind
+    
+    enum CodingKeys: String, CodingKey {
+        case dateTimeUTC
+        case temperature
+        case condition
+        case iconCode
+        case lop
+        case windChill
+        case humidex
+        case wind
+    }
+    
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        dateTimeUTC = try values.decode(String.self, forKey: .dateTimeUTC)
+        temperature = try values.decode(Double.self, forKey: .temperature)
+        condition = try values.decode(String.self, forKey: .condition)
+        iconCode = try values.decode(Int.self, forKey: .iconCode)
+        lop = try values.decode(Double.self, forKey: .lop)
+        humidex = try values.decode(Double?.self, forKey: .humidex)
+        wind = try values.decode(Wind.self, forKey: .wind)
+
+        do {
+            windChill = try values.decode(Double.self, forKey: .windChill)
+        }catch {
+            windChill = nil
+        }
+    }
+    
     var isNight : Bool {
         return iconCode >= 30 && iconCode <= 39 // Probably not always correct. Should check for sunset
     }
