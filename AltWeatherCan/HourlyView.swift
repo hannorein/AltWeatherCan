@@ -51,7 +51,11 @@ struct HourlyView : View {
                                             }else if let windChill = forecast.windChill {
                                                 Text("Feels like: ").bold() + Text(String(format: " %.0fºC", windChill))
                                             }
-                                            Text("Wind: ").bold() + Text(forecast.wind.direction) + Text(String(format: " %.0f km/h", forecast.wind.speed))
+                                            if forecast.wind.speed == "calm"{
+                                                Text("Wind: ").bold() + Text("calm")
+                                            }else{
+                                                Text("Wind: ").bold() + Text("\(forecast.wind.direction) \(forecast.wind.speed) km/h")
+                                            }
                                             if let gust = forecast.wind.gust {
                                                 Text("Gust: ").bold() + Text(String(format: " %.0f km/h", gust))
                                             }

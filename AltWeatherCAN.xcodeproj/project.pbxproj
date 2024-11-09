@@ -10,7 +10,18 @@
 		3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3762DE892CCD75D1005539C2 /* XMLCoder */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		37136AA82CDFFE9E00A74186 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3762DE692CCD7308005539C2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3762DE702CCD7308005539C2;
+			remoteInfo = AltWeatherCAN;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AltWeatherCANTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3762DE712CCD7308005539C2 /* AltWeatherCAN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltWeatherCAN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -25,6 +36,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		37136AA52CDFFE9E00A74186 /* AltWeatherCANTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = AltWeatherCANTests;
+			sourceTree = "<group>";
+		};
 		3762DE732CCD7308005539C2 /* AltWeatherCan */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -36,6 +52,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		37136AA12CDFFE9E00A74186 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3762DE6E2CCD7308005539C2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -51,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
+				37136AA52CDFFE9E00A74186 /* AltWeatherCANTests */,
 				3762DE722CCD7308005539C2 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				3762DE712CCD7308005539C2 /* AltWeatherCAN.app */,
+				37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -66,6 +91,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 37136AAA2CDFFE9E00A74186 /* Build configuration list for PBXNativeTarget "AltWeatherCANTests" */;
+			buildPhases = (
+				37136AA02CDFFE9E00A74186 /* Sources */,
+				37136AA12CDFFE9E00A74186 /* Frameworks */,
+				37136AA22CDFFE9E00A74186 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				37136AA92CDFFE9E00A74186 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				37136AA52CDFFE9E00A74186 /* AltWeatherCANTests */,
+			);
+			name = AltWeatherCANTests;
+			packageProductDependencies = (
+			);
+			productName = AltWeatherCANTests;
+			productReference = 37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		3762DE702CCD7308005539C2 /* AltWeatherCAN */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3762DE7F2CCD7309005539C2 /* Build configuration list for PBXNativeTarget "AltWeatherCAN" */;
@@ -96,9 +144,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
+					37136AA32CDFFE9E00A74186 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 3762DE702CCD7308005539C2;
+					};
 					3762DE702CCD7308005539C2 = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -122,11 +174,19 @@
 			projectRoot = "";
 			targets = (
 				3762DE702CCD7308005539C2 /* AltWeatherCAN */,
+				37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		37136AA22CDFFE9E00A74186 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3762DE6F2CCD7308005539C2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,6 +197,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		37136AA02CDFFE9E00A74186 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3762DE6D2CCD7308005539C2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -146,7 +213,53 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		37136AA92CDFFE9E00A74186 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3762DE702CCD7308005539C2 /* AltWeatherCAN */;
+			targetProxy = 37136AA82CDFFE9E00A74186 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		37136AAB2CDFFE9E00A74186 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75UTLBJDJK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.AltWeatherCANTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltWeatherCAN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltWeatherCAN";
+			};
+			name = Debug;
+		};
+		37136AAC2CDFFE9E00A74186 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 75UTLBJDJK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.AltWeatherCANTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltWeatherCAN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltWeatherCAN";
+			};
+			name = Release;
+		};
 		3762DE7D2CCD7309005539C2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -272,7 +385,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
 				DEVELOPMENT_TEAM = 75UTLBJDJK;
 				ENABLE_PREVIEWS = YES;
@@ -289,7 +402,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -304,7 +417,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
 				DEVELOPMENT_TEAM = 75UTLBJDJK;
 				ENABLE_PREVIEWS = YES;
@@ -321,7 +434,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -333,6 +446,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		37136AAA2CDFFE9E00A74186 /* Build configuration list for PBXNativeTarget "AltWeatherCANTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				37136AAB2CDFFE9E00A74186 /* Debug */,
+				37136AAC2CDFFE9E00A74186 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3762DE6C2CCD7308005539C2 /* Build configuration list for PBXProject "AltWeatherCAN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

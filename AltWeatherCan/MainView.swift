@@ -32,7 +32,7 @@ struct MainView : View {
                     Link(destination: URL(string: event.url)!) {
                         HStack {
                             Image("warningTriangle24x24")
-                            Spacer()
+                            Spacer() 
                             Text(event.description.capitalized)
                             Spacer()
                             Image("detailDisclosure25x25")

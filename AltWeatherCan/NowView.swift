@@ -92,8 +92,13 @@ struct NowView: View {
                                     .font(.footnote)
                             }
                             if let wind = currentConditions.wind {
-                                Text(String(format:"Wind: \(wind.direction) %.0f km/h", wind.speed))
-                                    .font(.footnote)
+                                if (wind.speed == "calm"){
+                                    Text("Wind: calm")
+                                        .font(.footnote)
+                                }else{
+                                    Text("Wind: \(wind.direction) \(wind.speed) km/h")
+                                            .font(.footnote)
+                                }
                                 if let gust = wind.gust {
                                     Text(String(format:"Gusts: %.0f km/h", gust))
                                         .font(.footnote)

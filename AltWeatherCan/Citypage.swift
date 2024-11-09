@@ -9,7 +9,7 @@ import Foundation
 import XMLCoder
 
 struct Wind : Decodable {
-    let speed: Double
+    let speed: String
     let gust: Double?
     let direction: String
     
@@ -21,7 +21,7 @@ struct Wind : Decodable {
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        speed = try values.decode(Double.self, forKey: .speed)
+        speed = try values.decode(String.self, forKey: .speed)
         direction = try values.decode(String.self, forKey: .direction)
         do {
             gust = try values.decode(Double.self, forKey: .gust)
