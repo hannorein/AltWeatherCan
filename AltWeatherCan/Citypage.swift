@@ -162,6 +162,19 @@ struct Forecast : Decodable, Identifiable {
 struct ForecastGroup : Decodable {
     let forecast: [Forecast]
     let dateTime: [DateTime]
+    
+    enum CodingKeys: String, CodingKey {
+        case forecast
+        case dateTime
+    }
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        forecast = (try? values.decode([Forecast].self, forKey: .forecast)) ?? []
+        dateTime = (try? values.decode([DateTime].self, forKey: .dateTime)) ?? []
+        if forecast.count == 0 {
+            print("did not find forecasts")
+        }
+    }
 }
 
 struct HourlyForecast : Decodable, Identifiable {
@@ -271,7 +284,7 @@ struct RiseSet : Decodable {
 }
 
 struct Event : Decodable, Identifiable {
-    var id = UUID()
+    let id = UUID()
     let type : String
     let url : String
     let description : String
@@ -287,7 +300,7 @@ struct Citypage : Decodable {
     let warnings: Warnings
     let location: Location
     let currentConditions: CurrentConditions?
-    let forecastGroup: ForecastGroup
+    let forecastGroup: ForecastGroup?
     let hourlyForecastGroup: HourlyForecastGroup
     let riseSet : RiseSet
 }

@@ -15,7 +15,11 @@ struct HourlyView : View {
             VStack{
                 if let citypage = appManager.citypage {
                     ScrollView(.vertical) {
-                        if let issueDate = citypage.forecastGroup.dateTime.first(where: { $0.UTCOffset != 0 }) {
+                        if appManager.citypage?.hourlyForecastGroup.hourlyForecast.count == 0 {
+                            Text("No forecast available.")
+                                .foregroundStyle(.white)
+                        }
+                        if let issueDate = citypage.forecastGroup?.dateTime.first(where: { $0.UTCOffset != 0 }) {
                             Text("Issued at: \(issueDate.textSummary)")
                                 .font(.caption2)
                                 .frame(maxWidth:.infinity, alignment: .leading)

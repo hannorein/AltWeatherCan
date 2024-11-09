@@ -12,8 +12,8 @@ struct SevenDayView : View {
     
     private func forecastsCleaned () -> [Forecast] {
         
-        if let citypage = appManager.citypage {
-            var forecasts = citypage.forecastGroup.forecast
+        if let forecastGroup = appManager.citypage?.forecastGroup {
+            var forecasts = forecastGroup.forecast
             if let first = forecasts.first {
                 if first.period.localizedCaseInsensitiveContains("night"){
                     forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(), temperatures: Temperatures(temperature: Double.nan, textSummary: "-"), windChill: nil), at: 0)
@@ -30,7 +30,11 @@ struct SevenDayView : View {
             VStack{
                 if let citypage = appManager.citypage {
                     ScrollView(.vertical) {
-                        if let issueDate = citypage.forecastGroup.dateTime.first(where: { $0.UTCOffset != 0 }) {
+                        if appManager.citypage?.forecastGroup?.forecast.count == 0 {
+                            Text("No forecast available.")
+                                .foregroundStyle(.white)
+                        }
+                        if let issueDate = citypage.forecastGroup?.dateTime.first(where: { $0.UTCOffset != 0 }) {
                             Text("Issued at: \(issueDate.textSummary)")
                                 .font(.caption2)
                                 .frame(maxWidth:.infinity, alignment: .leading)

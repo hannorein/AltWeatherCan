@@ -22,7 +22,7 @@ struct AltWeatherCANTests {
         for (index, site) in sites.enumerated() {
             let stationUrl = "https://dd.weather.gc.ca/citypage_weather/xml/"+site.province+"/"+site.code+"_e.xml"
             print("Getting \(index+1)/\(sites.count): \(stationUrl)")
-            let sourceXML = try String(contentsOf: URL(string: stationUrl)!, encoding: .ascii)
+            let sourceXML = try String(contentsOf: URL(string: stationUrl)!, encoding: .utf8)
             
             let citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
         }
