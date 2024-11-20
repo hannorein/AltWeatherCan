@@ -97,9 +97,13 @@ class AppManager : ObservableObject {
     }
     
     func refreshSiteList() async {
-        DispatchQueue.main.async{
-            self.sites = Site.getAvailableSites()
-            self.sortSiteList()
+        Task {
+            let newSites = Site.getAvailableSites()
+            DispatchQueue.main.async{
+                self.sites = newSites
+                self.sortSiteList()
+            }
         }
+        
     }
 }
