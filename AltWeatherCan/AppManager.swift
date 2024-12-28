@@ -17,6 +17,56 @@ actor DataDownloader {
         let sourceXML = try String(contentsOf: URL(string: stationUrl)!)
         return try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
     }
+    
+    func getAvailableSites() async throws -> [Site] {
+        var newSites: [Site] = []
+        let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv")!, encoding: .utf8)
+        var rows = sourceCSV.components(separatedBy: "\n")
+        
+        rows.removeFirst()
+        rows.removeFirst()
+        
+        for row in rows {
+            let columns = row.components(separatedBy: ",")
+            if columns.count >= 5 {
+                let latitude = Double(columns[3].replacingOccurrences(of: "N", with: ""))
+                let longitude = Double("-"+columns[4].replacingOccurrences(of: "W", with: "")) // Hard coded for Canada
+                let site = Site(code: columns[0], name: columns[1], province: columns[2], latitude: latitude, longitude: longitude)
+                newSites.append(site)
+            }
+        }
+        return newSites
+    }
+}
+
+class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    private var manager : CLLocationManager
+    weak var appManager : AppManager? = nil
+    
+    override init() {
+        self.manager = CLLocationManager()
+        super.init()
+    }
+    func startUpdatingLocation() {
+        manager.requestWhenInUseAuthorization()
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.distanceFilter = 100.0
+        manager.delegate = self
+        manager.startUpdatingLocation()
+    }
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let loc = locations.first {
+            print("Location \(loc)")
+            Task{
+                if let appManager = self.appManager {
+                    await appManager.updateLocation(loc: loc)
+                }
+            }
+        }
+    }
+    nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
+        print("Location error (ignored) \(error).")
+    }
 }
 
 @MainActor
@@ -24,13 +74,13 @@ class AppManager : ObservableObject {
     
     @Published var citypage : Citypage? = nil
     @Published var sites : [Site]? = nil
-//    @Published var selectedSite = Site(code: "s0000458", name: "Toronto", province: "ON", latitude: 43.74, longitude: 79.37)
-//    @Published var selectedSite = Site(code: "s0000630", name: "Port Perry", province: "ON", latitude: 43.74, longitude: 79.37)
     @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37)
-    @Published var previousSites : [Site] = []
+    
+    @Published var location : CLLocation? = nil
+    var previousSites : [Site] = []
     private let dataDownloader: DataDownloader
+    private let locationManager : LocationManager
 
-//    var locationManager : CLLocationManager?
 
     init() {
         let defaults = UserDefaults.standard
@@ -43,12 +93,14 @@ class AppManager : ObservableObject {
             previousSites = _previousSites
         }
         self.dataDownloader = DataDownloader()
-       
-        DispatchQueue.global().async {
-            Task {
-                await self.refreshSiteList()
-                await self.refresh()
-            }
+        self.locationManager = LocationManager()
+        
+        self.locationManager.appManager = self
+        self.locationManager.startUpdatingLocation()
+        
+        Task {
+            await self.refreshSiteList()
+            await self.refresh()
         }
     }
     
@@ -103,13 +155,16 @@ class AppManager : ObservableObject {
     }
     
     func refreshSiteList() async {
-        Task {
-            let newSites = Site.getAvailableSites()
-            DispatchQueue.main.async{
-                self.sites = newSites
-                self.sortSiteList()
-            }
+        do{
+            let newSites = try await dataDownloader.getAvailableSites()
+            self.sites = newSites
+            self.sortSiteList()
+        }catch {
+            print("Unable to download site list.")
         }
-        
+    }
+    
+    func updateLocation(loc: CLLocation) {
+        self.location = loc
     }
 }
