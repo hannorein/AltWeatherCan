@@ -35,8 +35,16 @@ struct LocationView : View {
                         }
                         locationScreenShown = false
                     } label: {
-                        Text("\(site.name), \(site.province)")
-                            .tint(.black)
+                        HStack{
+                            Text("\(site.name), \(site.province)")
+                                .tint(.black)
+                            if let distance = site.distance{                            Spacer()
+                                Text(distance.formatted(.measurement(width: .abbreviated, usage: .general)))
+                                    .font(.footnote)
+                                    .tint(.gray)
+                            }
+                        }
+                        
                     }
                 }
             }

@@ -13,4 +13,5 @@ struct Site : Identifiable, Hashable, Codable {
     let province : String
     let latitude : Double?
     let longitude : Double?
+    var distance : Measurement<UnitLength>?
 }

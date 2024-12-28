@@ -31,7 +31,7 @@ actor DataDownloader {
             if columns.count >= 5 {
                 let latitude = Double(columns[3].replacingOccurrences(of: "N", with: ""))
                 let longitude = Double("-"+columns[4].replacingOccurrences(of: "W", with: "")) // Hard coded for Canada
-                let site = Site(code: columns[0], name: columns[1], province: columns[2], latitude: latitude, longitude: longitude)
+                let site = Site(code: columns[0], name: columns[1], province: columns[2], latitude: latitude, longitude: longitude, distance: nil)
                 newSites.append(site)
             }
         }
@@ -74,7 +74,7 @@ class AppManager : ObservableObject {
     
     @Published var citypage : Citypage? = nil
     @Published var sites : [Site]? = nil
-    @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37)
+    @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37, distance: nil)
     
     @Published var location : CLLocation? = nil
     var previousSites : [Site] = []
@@ -138,7 +138,15 @@ class AppManager : ObservableObject {
     
     func sortSiteList() {
         if let sites = self.sites {
+            // Alphabetic sort
+            //            self.sites = sites.sorted(by: { a, b in
+            //                return a.name < b.name
+            //            })
+            // Distance first, then alphabetic
             self.sites = sites.sorted(by: { a, b in
+                if let ad = a.distance, let bd = b.distance {
+                    return ad < bd
+                }
                 return a.name < b.name
             })
             // Move previous selection to top of list.
@@ -159,12 +167,26 @@ class AppManager : ObservableObject {
             let newSites = try await dataDownloader.getAvailableSites()
             self.sites = newSites
             self.sortSiteList()
+            updateSiteDistances()
         }catch {
             print("Unable to download site list.")
         }
     }
     
     func updateLocation(loc: CLLocation) {
-        self.location = loc
+        location = loc
+        updateSiteDistances()
+    }
+    func updateSiteDistances() {
+        if var sites, let location {
+            for index in 0..<sites.count {
+                if let latitude = sites[index].latitude, let longitude = sites[index].longitude {
+                    let sl = CLLocation(latitude: latitude, longitude: longitude)
+                    print(sl.distance(from: location))
+                    sites[index].distance = Measurement(value: sl.distance(from: location), unit: .meters)
+                }
+            }
+            self.sites = sites
+        }
     }
 }
