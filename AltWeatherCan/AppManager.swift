@@ -7,8 +7,19 @@
 
 import Foundation
 import XMLCoder
+import CoreLocation
 
 
+actor DataDownloader {
+    func getCitypage(site: Site) async throws -> Citypage {
+        let stationUrl = "https://dd.weather.gc.ca/citypage_weather/xml/"+site.province+"/"+site.code+"_e.xml"
+        print("Getting \(stationUrl)")
+        let sourceXML = try String(contentsOf: URL(string: stationUrl)!)
+        return try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
+    }
+}
+
+@MainActor
 class AppManager : ObservableObject {
     
     @Published var citypage : Citypage? = nil
@@ -17,7 +28,10 @@ class AppManager : ObservableObject {
 //    @Published var selectedSite = Site(code: "s0000630", name: "Port Perry", province: "ON", latitude: 43.74, longitude: 79.37)
     @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37)
     @Published var previousSites : [Site] = []
-    
+    private let dataDownloader: DataDownloader
+
+//    var locationManager : CLLocationManager?
+
     init() {
         let defaults = UserDefaults.standard
         if let contentData = defaults.object(forKey: "defaultSite") as? Data,
@@ -28,6 +42,7 @@ class AppManager : ObservableObject {
             let _previousSites = try? JSONDecoder().decode([Site].self, from: contentData) {
             previousSites = _previousSites
         }
+        self.dataDownloader = DataDownloader()
        
         DispatchQueue.global().async {
             Task {
@@ -39,39 +54,30 @@ class AppManager : ObservableObject {
     
     func refresh() async {
         do {
+            let newCitypage = try await dataDownloader.getCitypage(site: selectedSite)
             
-            let stationUrl = "https://dd.weather.gc.ca/citypage_weather/xml/"+selectedSite.province+"/"+selectedSite.code+"_e.xml"
-            print("Getting \(stationUrl)")
-            let sourceXML = try String(contentsOf: URL(string: stationUrl)!)
+            self.citypage = newCitypage
+            // On success only, store site in UserDefaults
+            let defaults = UserDefaults.standard
+            if let contentData = try? JSONEncoder().encode(self.selectedSite) {
+                defaults.set(contentData, forKey: "defaultSite")
+            }
+            // Store list of previous sites
+            self.previousSites.removeAll { s in
+                s.code == self.selectedSite.code
+            }
             
-            DispatchQueue.main.async{
-                do {
-                    self.citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
-                    // On success only, store site in UserDefaults
-                    let defaults = UserDefaults.standard
-                    if let contentData = try? JSONEncoder().encode(self.selectedSite) {
-                        defaults.set(contentData, forKey: "defaultSite")
-                    }
-                    // Store list of previous sites
-                    self.previousSites.removeAll { s in
-                        s.code == self.selectedSite.code
-                    }
-                    
-                    self.previousSites.insert(self.selectedSite, at: 0)
-                    if self.previousSites.count > 10 {
-                        self.previousSites.removeLast()
-                    }
-                    // Re-sort (puts recent ones at top)
-                    self.sortSiteList()
-                    
-                    if let contentData = try? JSONEncoder().encode(self.previousSites) {
-                        defaults.set(contentData, forKey: "previousSites")
-                    }else{
-                        print("encoding error previousSites")
-                    }
-                } catch {
-                    print("decoding error: \(error)")
-                }
+            self.previousSites.insert(self.selectedSite, at: 0)
+            if self.previousSites.count > 10 {
+                self.previousSites.removeLast()
+            }
+            // Re-sort (puts recent ones at top)
+            self.sortSiteList()
+            
+            if let contentData = try? JSONEncoder().encode(self.previousSites) {
+                defaults.set(contentData, forKey: "previousSites")
+            }else{
+                print("encoding error previousSites")
             }
         }catch {
             print("download error: \(error)")
