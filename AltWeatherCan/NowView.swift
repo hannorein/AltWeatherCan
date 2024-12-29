@@ -183,8 +183,15 @@ struct NowView: View {
                     .padding(.top, 40)
                     .padding(.bottom, 4)
             } else {
-                Text("No weather data available.")
-                    .frame(maxWidth: .infinity)
+                if appManager.status == .loading {
+                    Text("Downloading weather data ...")
+                        .padding(20)
+                        .frame(maxWidth: .infinity)
+                }else{
+                    Text("An error occurred while trying to download weather data. Make sure you are connected to the internet.")
+                        .padding(20)
+                        .frame(maxWidth: .infinity)
+                }
             }
         }
         .refreshable {

@@ -56,7 +56,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let loc = locations.first {
-            print("Location \(loc)")
             Task{
                 if let appManager = self.appManager {
                     await appManager.updateLocation(loc: loc)
@@ -69,13 +68,19 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 }
 
+enum AltWeatherCanStatus {
+    case loading
+    case success
+    case error
+}
+
 @MainActor
 class AppManager : ObservableObject {
     
     @Published var citypage : Citypage? = nil
     @Published var sites : [Site]? = nil
     @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37, distance: nil)
-    
+    @Published var status : AltWeatherCanStatus = .loading
     @Published var location : CLLocation? = nil
     var previousSites : [Site] = []
     private let dataDownloader: DataDownloader
@@ -107,8 +112,9 @@ class AppManager : ObservableObject {
     func refresh() async {
         do {
             let newCitypage = try await dataDownloader.getCitypage(site: selectedSite)
-            
             self.citypage = newCitypage
+            self.status = citypage==nil ? .error : .success
+            
             // On success only, store site in UserDefaults
             let defaults = UserDefaults.standard
             if let contentData = try? JSONEncoder().encode(self.selectedSite) {
@@ -118,13 +124,16 @@ class AppManager : ObservableObject {
             self.previousSites.removeAll { s in
                 s.code == self.selectedSite.code
             }
-            
             self.previousSites.insert(self.selectedSite, at: 0)
             if self.previousSites.count > 10 {
                 self.previousSites.removeLast()
             }
             // Re-sort (puts recent ones at top)
-            self.sortSiteList()
+            if (sites?.isEmpty == false){
+                self.sortSiteList()
+            }else{
+                await self.refreshSiteList() // In case site list wasn't downloaded successfully (e.g. no internet on startup)
+            }
             
             if let contentData = try? JSONEncoder().encode(self.previousSites) {
                 defaults.set(contentData, forKey: "previousSites")
@@ -132,6 +141,7 @@ class AppManager : ObservableObject {
                 print("encoding error previousSites")
             }
         }catch {
+            self.status = .error
             print("download error: \(error)")
         }
     }
@@ -182,7 +192,6 @@ class AppManager : ObservableObject {
             for index in 0..<sites.count {
                 if let latitude = sites[index].latitude, let longitude = sites[index].longitude {
                     let sl = CLLocation(latitude: latitude, longitude: longitude)
-                    print(sl.distance(from: location))
                     sites[index].distance = Measurement(value: sl.distance(from: location), unit: .meters)
                 }
             }

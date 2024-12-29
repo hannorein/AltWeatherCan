@@ -29,9 +29,12 @@ struct LocationView : View {
             List{
                 ForEach(searchResults, id: \.self) { site in
                     Button {
-                        appManager.selectedSite = site
-                        Task {
-                            await appManager.refresh()
+                        if site != appManager.selectedSite {
+                            appManager.selectedSite = site
+                            appManager.citypage = nil
+                            Task {
+                                await appManager.refresh()
+                            }
                         }
                         locationScreenShown = false
                     } label: {
@@ -46,6 +49,15 @@ struct LocationView : View {
                         }
                         
                     }
+                }
+                if !(appManager.sites?.isEmpty == false) {
+                    VStack(alignment: .leading){
+                        Text("Unable to access weather station list.")
+                        Text("Make sure you are connected to the internet.")
+                            .font(.footnote)
+                    }
+                }else if searchResults.isEmpty {
+                    Text("No sites found")
                 }
             }
             .background(colourTop)
@@ -68,6 +80,12 @@ struct LocationView : View {
         .onAppear {
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .white
             UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = .black
+            UISearchBar.appearance().tintColor = .white // Color of cancel button
+            Task {
+                if !(appManager.sites?.isEmpty == false){
+                    await appManager.refreshSiteList() // In case site list wasn't downloaded successfully (e.g. no internet on startup)
+                }
+            }
         }
         
     }

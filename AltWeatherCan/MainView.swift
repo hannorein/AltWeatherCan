@@ -14,19 +14,18 @@ struct MainView : View {
 
     var body: some View {
         VStack{
+            HStack{
+                Text("\(appManager.selectedSite.name), \(appManager.selectedSite.province.uppercased())")
+                    .font(.title)
+                Image("search25x25")
+                    .renderingMode(.template)
+                    .resizable()
+                    .frame(width: 28, height: 28)
+            }
+            .onTapGesture {
+                locationScreenShown.toggle()
+            }
             if let citypage = appManager.citypage {
-                
-                HStack{
-                    Text("\(citypage.location.name), \(citypage.location.province.code.uppercased())")
-                        .font(.title)
-                    Image("search25x25")
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                }
-                .onTapGesture {
-                    locationScreenShown.toggle()
-                }
                 ForEach(citypage.warnings.event) { event in
                     let type = event.type.lowercased()
                     Link(destination: URL(string: event.url)!) {
@@ -41,18 +40,6 @@ struct MainView : View {
                         .padding(5)
                         .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
                     }
-                }
-            }else{
-                HStack{
-                    Text("No location selected")
-                        .font(.title)
-                    Image("search25x25")
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                }
-                .onTapGesture {
-                    locationScreenShown.toggle()
                 }
             }
             TabView {
