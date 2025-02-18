@@ -88,7 +88,7 @@ struct NowView: View {
                                     .bold()
                             }
                             if let windChill = currentConditions.windChill {
-                                Text(String(format:"Feels like: %.0f km/h", windChill))
+                                Text(String(format:"Feels like: %.0f ºC", windChill))
                                     .font(.footnote)
                             }
                             if let wind = currentConditions.wind {
