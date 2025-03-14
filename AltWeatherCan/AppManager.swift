@@ -14,7 +14,7 @@ actor DataDownloader {
     func getCitypage(site: Site) async throws -> Citypage {
         let stationUrl = "https://dd.weather.gc.ca/citypage_weather/xml/"+site.province+"/"+site.code+"_e.xml"
         print("Getting \(stationUrl)")
-        let sourceXML = try String(contentsOf: URL(string: stationUrl)!)
+        let sourceXML = try String( contentsOf: URL(string: stationUrl)!, encoding: .utf8)
         return try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
     }
     
@@ -83,6 +83,7 @@ class AppManager : ObservableObject {
     @Published var status : AltWeatherCanStatus = .loading
     @Published var location : CLLocation? = nil
     var previousSites : [Site] = []
+    private var closestSite : Site? = nil
     private let dataDownloader: DataDownloader
     private let locationManager : LocationManager
 
@@ -152,13 +153,18 @@ class AppManager : ObservableObject {
             //            self.sites = sites.sorted(by: { a, b in
             //                return a.name < b.name
             //            })
-            // Distance first, then alphabetic
+            // Distance first (places without distance last), then alphabetic
             self.sites = sites.sorted(by: { a, b in
                 if let ad = a.distance, let bd = b.distance {
                     return ad < bd
+                }else if a.distance != nil { // place without distance last
+                    return true
+                }else if b.distance != nil { // place without distance last
+                    return false
                 }
                 return a.name < b.name
             })
+            self.closestSite = self.sites?.first
             // Move previous selection to top of list.
             for site in previousSites.reversed() {
                 if let index = self.sites?.firstIndex(where: { s in
@@ -176,7 +182,6 @@ class AppManager : ObservableObject {
         do{
             let newSites = try await dataDownloader.getAvailableSites()
             self.sites = newSites
-            self.sortSiteList()
             updateSiteDistances()
         }catch {
             print("Unable to download site list.")
@@ -186,6 +191,19 @@ class AppManager : ObservableObject {
     func updateLocation(loc: CLLocation) {
         location = loc
         updateSiteDistances()
+        let defaults = UserDefaults.standard
+        let gotLocationBefore = defaults.bool(forKey: "locationReceivedOnce")
+        if !gotLocationBefore {
+            if let closestSite = self.closestSite {
+                defaults.set(true, forKey: "locationReceivedOnce")
+                self.selectedSite = closestSite
+                self.citypage = nil
+                Task {
+                    await self.refresh()
+                }
+            }
+        }
+        
     }
     func updateSiteDistances() {
         if var sites, let location {
@@ -197,5 +215,6 @@ class AppManager : ObservableObject {
             }
             self.sites = sites
         }
+        self.sortSiteList()
     }
 }
