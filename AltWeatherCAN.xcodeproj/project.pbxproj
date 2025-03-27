@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		37136AB42CE0031600A74186 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 37136AB32CE0031600A74186 /* XMLCoder */; };
+		374B21512D95E7D600B73804 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374B21502D95E7D600B73804 /* WidgetKit.framework */; };
+		374B21532D95E7D600B73804 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374B21522D95E7D600B73804 /* SwiftUI.framework */; };
+		374B21602D95E7D700B73804 /* Seven DayExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 374B214F2D95E7D600B73804 /* Seven DayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		374B216C2D95EC9600B73804 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 374B216B2D95EC9600B73804 /* XMLCoder */; };
 		3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3762DE892CCD75D1005539C2 /* XMLCoder */; };
 /* End PBXBuildFile section */
 
@@ -19,10 +23,34 @@
 			remoteGlobalIDString = 3762DE702CCD7308005539C2;
 			remoteInfo = AltWeatherCAN;
 		};
+		374B215E2D95E7D700B73804 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3762DE692CCD7308005539C2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 374B214E2D95E7D600B73804;
+			remoteInfo = "Seven DayExtension";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		374B21652D95E7D700B73804 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				374B21602D95E7D700B73804 /* Seven DayExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AltWeatherCANTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		374B214F2D95E7D600B73804 /* Seven DayExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Seven DayExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		374B21502D95E7D600B73804 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		374B21522D95E7D600B73804 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		3762DE712CCD7308005539C2 /* AltWeatherCAN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltWeatherCAN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -34,6 +62,23 @@
 				Site.swift,
 			);
 			target = 37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */;
+		};
+		374B21642D95E7D700B73804 /* Exceptions for "Seven Day" folder in "Seven DayExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 374B214E2D95E7D600B73804 /* Seven DayExtension */;
+		};
+		374B21672D95EC0200B73804 /* Exceptions for "AltWeatherCan" folder in "Seven DayExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Citypage.swift,
+				DataDownloader.swift,
+				Horizontal7DayView.swift,
+				Site.swift,
+			);
+			target = 374B214E2D95E7D600B73804 /* Seven DayExtension */;
 		};
 		378F01FF2CD16B0B00BA7274 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCAN" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -50,11 +95,20 @@
 			path = AltWeatherCANTests;
 			sourceTree = "<group>";
 		};
+		374B21542D95E7D600B73804 /* Seven Day */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				374B21642D95E7D700B73804 /* Exceptions for "Seven Day" folder in "Seven DayExtension" target */,
+			);
+			path = "Seven Day";
+			sourceTree = "<group>";
+		};
 		3762DE732CCD7308005539C2 /* AltWeatherCan */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				378F01FF2CD16B0B00BA7274 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCAN" target */,
 				37136AB02CE0012E00A74186 /* Exceptions for "AltWeatherCan" folder in "AltWeatherCANTests" target */,
+				374B21672D95EC0200B73804 /* Exceptions for "AltWeatherCan" folder in "Seven DayExtension" target */,
 			);
 			path = AltWeatherCan;
 			sourceTree = "<group>";
@@ -67,6 +121,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				37136AB42CE0031600A74186 /* XMLCoder in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		374B214C2D95E7D600B73804 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				374B216C2D95EC9600B73804 /* XMLCoder in Frameworks */,
+				374B21532D95E7D600B73804 /* SwiftUI.framework in Frameworks */,
+				374B21512D95E7D600B73804 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +148,8 @@
 		37136AB22CE0031600A74186 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				374B21502D95E7D600B73804 /* WidgetKit.framework */,
+				374B21522D95E7D600B73804 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -93,6 +159,7 @@
 			children = (
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
 				37136AA52CDFFE9E00A74186 /* AltWeatherCANTests */,
+				374B21542D95E7D600B73804 /* Seven Day */,
 				37136AB22CE0031600A74186 /* Frameworks */,
 				3762DE722CCD7308005539C2 /* Products */,
 			);
@@ -103,6 +170,7 @@
 			children = (
 				3762DE712CCD7308005539C2 /* AltWeatherCAN.app */,
 				37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */,
+				374B214F2D95E7D600B73804 /* Seven DayExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -134,6 +202,29 @@
 			productReference = 37136AA42CDFFE9E00A74186 /* AltWeatherCANTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		374B214E2D95E7D600B73804 /* Seven DayExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 374B21612D95E7D700B73804 /* Build configuration list for PBXNativeTarget "Seven DayExtension" */;
+			buildPhases = (
+				374B214B2D95E7D600B73804 /* Sources */,
+				374B214C2D95E7D600B73804 /* Frameworks */,
+				374B214D2D95E7D600B73804 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				374B21542D95E7D600B73804 /* Seven Day */,
+			);
+			name = "Seven DayExtension";
+			packageProductDependencies = (
+				374B216B2D95EC9600B73804 /* XMLCoder */,
+			);
+			productName = "Seven DayExtension";
+			productReference = 374B214F2D95E7D600B73804 /* Seven DayExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		3762DE702CCD7308005539C2 /* AltWeatherCAN */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3762DE7F2CCD7309005539C2 /* Build configuration list for PBXNativeTarget "AltWeatherCAN" */;
@@ -141,10 +232,12 @@
 				3762DE6D2CCD7308005539C2 /* Sources */,
 				3762DE6E2CCD7308005539C2 /* Frameworks */,
 				3762DE6F2CCD7308005539C2 /* Resources */,
+				374B21652D95E7D700B73804 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				374B215F2D95E7D700B73804 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
@@ -164,12 +257,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					37136AA32CDFFE9E00A74186 = {
 						CreatedOnToolsVersion = 16.1;
 						TestTargetID = 3762DE702CCD7308005539C2;
+					};
+					374B214E2D95E7D600B73804 = {
+						CreatedOnToolsVersion = 16.3;
 					};
 					3762DE702CCD7308005539C2 = {
 						CreatedOnToolsVersion = 16.0;
@@ -195,12 +291,20 @@
 			targets = (
 				3762DE702CCD7308005539C2 /* AltWeatherCAN */,
 				37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */,
+				374B214E2D95E7D600B73804 /* Seven DayExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		37136AA22CDFFE9E00A74186 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		374B214D2D95E7D600B73804 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -224,6 +328,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		374B214B2D95E7D600B73804 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3762DE6D2CCD7308005539C2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -238,6 +349,11 @@
 			isa = PBXTargetDependency;
 			target = 3762DE702CCD7308005539C2 /* AltWeatherCAN */;
 			targetProxy = 37136AA82CDFFE9E00A74186 /* PBXContainerItemProxy */;
+		};
+		374B215F2D95E7D700B73804 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 374B214E2D95E7D600B73804 /* Seven DayExtension */;
+			targetProxy = 374B215E2D95E7D700B73804 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -275,6 +391,60 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AltWeatherCAN.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/AltWeatherCAN";
+			};
+			name = Release;
+		};
+		374B21622D95E7D700B73804 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 10;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Seven Day/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Seven Day";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan.Seven-Day";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		374B21632D95E7D700B73804 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 10;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Seven Day/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Seven Day";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan.Seven-Day";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -473,6 +643,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		374B21612D95E7D700B73804 /* Build configuration list for PBXNativeTarget "Seven DayExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				374B21622D95E7D700B73804 /* Debug */,
+				374B21632D95E7D700B73804 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3762DE6C2CCD7308005539C2 /* Build configuration list for PBXProject "AltWeatherCAN" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -506,6 +685,11 @@
 
 /* Begin XCSwiftPackageProductDependency section */
 		37136AB32CE0031600A74186 /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */;
+			productName = XMLCoder;
+		};
+		374B216B2D95EC9600B73804 /* XMLCoder */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3762DE882CCD75D1005539C2 /* XCRemoteSwiftPackageReference "XMLCoder" */;
 			productName = XMLCoder;

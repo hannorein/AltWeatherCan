@@ -11,7 +11,6 @@ struct SevenDayView : View {
     @EnvironmentObject var appManager : AppManager
     
     private func forecastsCleaned () -> [Forecast] {
-        
         if let forecastGroup = appManager.citypage?.forecastGroup {
             var forecasts = forecastGroup.forecast
             if let first = forecasts.first {
@@ -40,52 +39,10 @@ struct SevenDayView : View {
                                 .frame(maxWidth:.infinity, alignment: .leading)
                                 .foregroundStyle(.white)
                         }
+                        
+                        Horizontal7DayView(forecastGroup: appManager.citypage?.forecastGroup)
+                        
                         let columns = [GridItem(.flexible())]
-                        
-                        ScrollView(.horizontal) {
-                            let rows = [GridItem(.fixed(20), spacing: 1), GridItem(.fixed(115), spacing: 1), GridItem(.fixed(115), spacing: 1)]
-                            
-                            LazyHGrid(rows: rows, spacing: 1) {
-                                ForEach(Array(forecastsCleaned().enumerated()), id: \.offset) { index, forecast in
-                                    if index % 2 == 0 {
-                                        Text(forecast.period)
-                                            .frame(width:100, height: 20)
-                                            .font(.footnote)
-                                            .background(.white)
-                                    }
-                                    VStack{
-                                        Text(index % 2 == 0 ? "Day" : "Night")
-                                            .font(.footnote)
-                                            .padding(.top, 4)
-                                        if (forecast.temperatures.temperature.isFinite){ // If first forecast is night
-                                            Image(forecast.abbreviatedForecast.iconName)
-                                                .resizable()
-                                                .frame(width:40, height: 40)
-                                            Text(String(format: "%.0fºC", forecast.temperatures.temperature))
-                                            if let pop = forecast.abbreviatedForecast.pop {
-                                                Text(String(format: "%.0f%%", pop))
-                                                    .font(.caption2)
-                                            }
-                                        }else{
-                                            Spacer()
-                                                .frame(width: 40, height: 40)
-                                            Text("---")
-                                                
-                                        }
-                                        Spacer()
-                                    }
-                                    .frame(maxWidth:.infinity, maxHeight:.infinity)
-                                    .font(.callout)
-                                    .background(.white)
-                                }
-                            }
-                        }
-                        .frame(height:252)
-                        .foregroundStyle(.black)
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: appCornerRadius)
-                        )
-                        
                         LazyVGrid(columns: columns, spacing: 1) {
                             ForEach(Array(forecastsCleaned().enumerated()), id: \.offset) { index, forecast in
                                 if index % 2 == 0 {
@@ -160,3 +117,4 @@ struct SevenDayView : View {
         .environmentObject(appManager)
     
 }
+
