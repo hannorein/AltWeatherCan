@@ -13,11 +13,11 @@ let appCornerRadius : CGFloat = 5
 
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
+        SimpleEntry(date: Date(), forecastGroup: nil, configuration: ConfigurationAppIntent())
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), configuration: configuration)
+        SimpleEntry(date: Date(), forecastGroup: nil, configuration: configuration)
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
@@ -25,9 +25,20 @@ struct Provider: AppIntentTimelineProvider {
 
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
+        for hourOffset in 0 ..< 1 {
+            let site = Site(code: "s0000630", name: "Inukjuak", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
+            let dataDownloader = DataDownloader()
+            var forecastGroup : ForecastGroup? = nil
+            do {
+                let newCitypage = try await dataDownloader.getCitypage(site: site)
+                forecastGroup = newCitypage.forecastGroup
+                print("Downloaded forecast.")
+            } catch {
+                print("Download error \(error)")
+            }
+            
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, configuration: configuration)
+            let entry = SimpleEntry(date: entryDate, forecastGroup: forecastGroup, configuration: configuration)
             entries.append(entry)
         }
 
@@ -41,6 +52,7 @@ struct Provider: AppIntentTimelineProvider {
 
 struct SimpleEntry: TimelineEntry {
     let date: Date
+    let forecastGroup : ForecastGroup?
     let configuration: ConfigurationAppIntent
 }
 
@@ -49,10 +61,10 @@ struct Seven_DayEntryView : View {
 
     var body: some View {
         VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Horizontal7DayView()
+//            Text("Time:")
+//            Text(entry.date, style: .time)
+//            
+            Horizontal7DayViewForWidget(forecastGroup: entry.forecastGroup)
         }
     }
 }
@@ -85,6 +97,5 @@ extension ConfigurationAppIntent {
 #Preview(as: .systemMedium) {
     Seven_Day()
 } timeline: {
-    SimpleEntry(date: .now, configuration: .smiley)
-    SimpleEntry(date: .now, configuration: .starEyes)
+    SimpleEntry(date: .now, forecastGroup: nil, configuration: .smiley)
 }

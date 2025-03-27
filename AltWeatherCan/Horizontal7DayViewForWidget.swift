@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Horizontal7DayView: View {
+struct Horizontal7DayViewForWidget: View {
     var forecastGroup : ForecastGroup?
     
     private func forecastsCleaned () -> [Forecast] {
@@ -17,6 +17,7 @@ struct Horizontal7DayView: View {
             if let first = forecasts.first {
                 if first.period.localizedCaseInsensitiveContains("night"){
                     forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(), temperatures: Temperatures(temperature: Double.nan, textSummary: "-"), windChill: nil), at: 0)
+                    forecasts.insert(Forecast(period: first.period.replacingOccurrences(of: " night", with: ""), textSummary: "", abbreviatedForecast: AbbreviatedForecast(), temperatures: Temperatures(temperature: Double.nan, textSummary: "-"), windChill: nil), at: forecasts.endIndex)
                 }
             }
             return forecasts
@@ -26,48 +27,47 @@ struct Horizontal7DayView: View {
     }
     
     var body: some View {
-        let rows = [GridItem(.fixed(20), spacing: 1), GridItem(.fixed(115), spacing: 1), GridItem(.fixed(115), spacing: 1)]
+        let rows = [GridItem(.fixed(20),spacing: 0), GridItem(.fixed(65),spacing: 0), GridItem(.fixed(65),spacing: 0)]
         
         LazyHGrid(rows: rows, spacing: 1) {
             ForEach(Array(forecastsCleaned().enumerated()), id: \.offset) { index, forecast in
                 if index % 2 == 0 {
-                    Text(forecast.period)
-                        .frame(width:100, height: 20)
-                        .font(.footnote)
-                        .background(.white)
+                    Text(forecast.period.prefix(3))
+                        .frame(width:47, height: 20)
+//                        .background(.blue)
                 }
                 VStack{
-                    Text(index % 2 == 0 ? "Day" : "Night")
-                        .font(.footnote)
-                        .padding(.top, 4)
+                    Divider()
+//                    Text(index % 2 == 0 ? "Day" : "Night")
+//                        .foregroundStyle(.secondary)
+//                        .padding(.top, 4)
                     if (forecast.temperatures.temperature.isFinite){ // If first forecast is night
                         Image(forecast.abbreviatedForecast.iconName)
                             .resizable()
-                            .frame(width:40, height: 40)
+                            .frame(width:30, height: 30)
                         Text(String(format: "%.0fºC", forecast.temperatures.temperature))
-                        if let pop = forecast.abbreviatedForecast.pop {
-                            Text(String(format: "%.0f%%", pop))
-                                .font(.caption2)
-                        }
+                            .font(.callout)
                     }else{
                         Spacer()
-                            .frame(width: 40, height: 40)
-                        Text("---")
-                        
+//                            .frame(width: 30, height: 30)
                     }
-                    Spacer()
+                    
                 }
-                .frame(maxWidth:.infinity, maxHeight:.infinity)
-                .font(.callout)
+                
+//                .frame(maxWidth:.infinity, maxHeight:.infinity)
+//                .font(.callout)
                 .background(.white)
             }
         }
+        .font(.caption2)
+//        .frame(height:170)
+//        .background(.red)
     }
 }
 
 #Preview {
     @Previewable @State var forecastGroup : ForecastGroup? = nil
-    Horizontal7DayView(forecastGroup: forecastGroup)
+    Horizontal7DayViewForWidget(forecastGroup: forecastGroup)
         .foregroundStyle(.black)
         .task {
             do {

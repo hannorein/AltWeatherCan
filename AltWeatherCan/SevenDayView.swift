@@ -40,7 +40,14 @@ struct SevenDayView : View {
                                 .foregroundStyle(.white)
                         }
                         
-                        Horizontal7DayView(forecastGroup: appManager.citypage?.forecastGroup)
+                        ScrollView(.horizontal) {
+                            Horizontal7DayView(forecastGroup: appManager.citypage?.forecastGroup)
+                                .frame(height:252)
+                                .foregroundStyle(.black)
+                                .clipShape(
+                                    RoundedRectangle(cornerRadius: appCornerRadius)
+                                )
+                        }
                         
                         let columns = [GridItem(.flexible())]
                         LazyVGrid(columns: columns, spacing: 1) {

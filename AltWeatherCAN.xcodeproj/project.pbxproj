@@ -76,7 +76,9 @@
 				Citypage.swift,
 				DataDownloader.swift,
 				Horizontal7DayView.swift,
+				Horizontal7DayViewForWidget.swift,
 				Site.swift,
+				WeatherIcons.xcassets,
 			);
 			target = 374B214E2D95E7D600B73804 /* Seven DayExtension */;
 		};
@@ -405,7 +407,7 @@
 				INFOPLIST_FILE = "Seven Day/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Seven Day";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -432,7 +434,7 @@
 				INFOPLIST_FILE = "Seven Day/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Seven Day";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
