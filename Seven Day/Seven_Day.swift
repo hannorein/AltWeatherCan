@@ -26,7 +26,17 @@ struct Provider: AppIntentTimelineProvider {
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 1 {
-            let site = Site(code: "s0000630", name: "Inukjuak", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
+            // Note: not working. needs to be a suite!
+            let defaults = UserDefaults.standard
+            
+            var site = Site(code: "s0000630", name: "Default", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
+            if let contentData = defaults.object(forKey: "defaultSite") as? Data,
+               let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
+                site = defaultSite
+                
+            }
+            print(site)
+            
             let dataDownloader = DataDownloader()
             var forecastGroup : ForecastGroup? = nil
             do {

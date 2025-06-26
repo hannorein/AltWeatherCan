@@ -7,15 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3712FB852E0D95D100D272D4 /* Seven DayExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 374B214F2D95E7D600B73804 /* Seven DayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		37136AB42CE0031600A74186 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 37136AB32CE0031600A74186 /* XMLCoder */; };
 		374B21512D95E7D600B73804 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374B21502D95E7D600B73804 /* WidgetKit.framework */; };
 		374B21532D95E7D600B73804 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374B21522D95E7D600B73804 /* SwiftUI.framework */; };
-		374B21602D95E7D700B73804 /* Seven DayExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 374B214F2D95E7D600B73804 /* Seven DayExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		374B216C2D95EC9600B73804 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 374B216B2D95EC9600B73804 /* XMLCoder */; };
 		3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3762DE892CCD75D1005539C2 /* XMLCoder */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3712FB862E0D95D100D272D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3762DE692CCD7308005539C2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 374B214E2D95E7D600B73804;
+			remoteInfo = "Seven DayExtension";
+		};
 		37136AA82CDFFE9E00A74186 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3762DE692CCD7308005539C2 /* Project object */;
@@ -23,23 +30,16 @@
 			remoteGlobalIDString = 3762DE702CCD7308005539C2;
 			remoteInfo = AltWeatherCAN;
 		};
-		374B215E2D95E7D700B73804 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3762DE692CCD7308005539C2 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 374B214E2D95E7D600B73804;
-			remoteInfo = "Seven DayExtension";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		374B21652D95E7D700B73804 /* Embed Foundation Extensions */ = {
+		3712FB882E0D95D100D272D4 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				374B21602D95E7D700B73804 /* Seven DayExtension.appex in Embed Foundation Extensions */,
+				3712FB852E0D95D100D272D4 /* Seven DayExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -234,12 +234,12 @@
 				3762DE6D2CCD7308005539C2 /* Sources */,
 				3762DE6E2CCD7308005539C2 /* Frameworks */,
 				3762DE6F2CCD7308005539C2 /* Resources */,
-				374B21652D95E7D700B73804 /* Embed Foundation Extensions */,
+				3712FB882E0D95D100D272D4 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				374B215F2D95E7D700B73804 /* PBXTargetDependency */,
+				3712FB872E0D95D100D272D4 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
@@ -347,15 +347,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3712FB872E0D95D100D272D4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 374B214E2D95E7D600B73804 /* Seven DayExtension */;
+			targetProxy = 3712FB862E0D95D100D272D4 /* PBXContainerItemProxy */;
+		};
 		37136AA92CDFFE9E00A74186 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3762DE702CCD7308005539C2 /* AltWeatherCAN */;
 			targetProxy = 37136AA82CDFFE9E00A74186 /* PBXContainerItemProxy */;
-		};
-		374B215F2D95E7D700B73804 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 374B214E2D95E7D600B73804 /* Seven DayExtension */;
-			targetProxy = 374B215E2D95E7D700B73804 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -402,7 +402,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Seven Day/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Seven Day";
@@ -413,7 +413,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan.Seven-Day";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -429,7 +429,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Seven Day/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Seven Day";
@@ -440,7 +440,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan.Seven-Day";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -577,7 +577,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -593,7 +593,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -608,7 +608,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -624,7 +624,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.hanno-rein.altweathercan";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
