@@ -189,10 +189,9 @@ class AppManager : ObservableObject {
         updateSiteDistances()
         let defaults = UserDefaults.sharedDefaults
         // Check if previously stored in standard UserDefaults. Can be removed in future.
-        let old_gotLocationBefore = UserDefaults.standard.bool(forKey: "locationReceivedOnce")
-        defaults.set(true, forKey: "locationReceivedOnce")
+        defaults.set(UserDefaults.standard.bool(forKey: "locationReceivedOnce"), forKey: "locationReceivedOnce")
         // Normal:
-        var gotLocationBefore = defaults.bool(forKey: "locationReceivedOnce")
+        let gotLocationBefore = defaults.bool(forKey: "locationReceivedOnce")
         if !gotLocationBefore {
             if let closestSite = self.closestSite {
                 defaults.set(true, forKey: "locationReceivedOnce")
