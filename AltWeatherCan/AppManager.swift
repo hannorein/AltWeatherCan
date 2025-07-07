@@ -8,7 +8,16 @@
 import Foundation
 import XMLCoder
 import CoreLocation
+import WidgetKit
 
+extension UserDefaults {
+    static var sharedDefaults: UserDefaults {
+        guard let defaults = UserDefaults(suiteName: "group.de.hanno-rein.AltWeatherCAN") else {
+            fatalError("Could not create shared UserDefaults")
+        }
+        return defaults
+    }
+}
 
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
@@ -61,14 +70,28 @@ class AppManager : ObservableObject {
 
 
     init() {
-        let defaults = UserDefaults.standard
+        let defaults = UserDefaults.sharedDefaults
         if let contentData = defaults.object(forKey: "defaultSite") as? Data,
             let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
             selectedSite = defaultSite
+        }else{
+            // Check for previously stored settings in standard UserDefaults. Can be removed in future.
+            let defaults = UserDefaults.standard
+            if let contentData = defaults.object(forKey: "defaultSite") as? Data,
+               let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
+                selectedSite = defaultSite
+            }
         }
         if let contentData = defaults.object(forKey: "previousSites") as? Data,
             let _previousSites = try? JSONDecoder().decode([Site].self, from: contentData) {
             previousSites = _previousSites
+        }else{
+            // Check for previously stored settings in standard UserDefaults. Can be removed in future.
+            let defaults = UserDefaults.standard
+            if let contentData = defaults.object(forKey: "previousSites") as? Data,
+                let _previousSites = try? JSONDecoder().decode([Site].self, from: contentData) {
+                previousSites = _previousSites
+            }
         }
         self.dataDownloader = DataDownloader()
         self.locationManager = LocationManager()
@@ -89,9 +112,10 @@ class AppManager : ObservableObject {
             self.status = citypage==nil ? .error : .success
             
             // On success only, store site in UserDefaults
-            let defaults = UserDefaults.standard
+            let defaults = UserDefaults.sharedDefaults
             if let contentData = try? JSONEncoder().encode(self.selectedSite) {
                 defaults.set(contentData, forKey: "defaultSite")
+                WidgetCenter.shared.reloadAllTimelines()
             }
             // Store list of previous sites
             self.previousSites.removeAll { s in
@@ -163,8 +187,12 @@ class AppManager : ObservableObject {
     func updateLocation(loc: CLLocation) {
         location = loc
         updateSiteDistances()
-        let defaults = UserDefaults.standard
-        let gotLocationBefore = defaults.bool(forKey: "locationReceivedOnce")
+        let defaults = UserDefaults.sharedDefaults
+        // Check if previously stored in standard UserDefaults. Can be removed in future.
+        let old_gotLocationBefore = UserDefaults.standard.bool(forKey: "locationReceivedOnce")
+        defaults.set(true, forKey: "locationReceivedOnce")
+        // Normal:
+        var gotLocationBefore = defaults.bool(forKey: "locationReceivedOnce")
         if !gotLocationBefore {
             if let closestSite = self.closestSite {
                 defaults.set(true, forKey: "locationReceivedOnce")

@@ -10,6 +10,15 @@ import SwiftUI
 
 let appCornerRadius : CGFloat = 5
 
+extension UserDefaults {
+    static var sharedDefaults: UserDefaults {
+        guard let defaults = UserDefaults(suiteName: "group.de.hanno-rein.AltWeatherCAN") else {
+            fatalError("Could not create shared UserDefaults")
+        }
+        return defaults
+    }
+}
+
 
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -27,13 +36,12 @@ struct Provider: AppIntentTimelineProvider {
         let currentDate = Date()
         for hourOffset in 0 ..< 1 {
             // Note: not working. needs to be a suite!
-            let defaults = UserDefaults.standard
+            let defaults = UserDefaults.sharedDefaults
             
             var site = Site(code: "s0000630", name: "Default", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
             if let contentData = defaults.object(forKey: "defaultSite") as? Data,
                let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
                 site = defaultSite
-                
             }
             print(site)
             

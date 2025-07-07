@@ -52,6 +52,8 @@
 		374B21502D95E7D600B73804 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		374B21522D95E7D600B73804 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		3762DE712CCD7308005539C2 /* AltWeatherCAN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltWeatherCAN.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		37F32CDF2E1C23DF007C8AE5 /* AltWeatherCAN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AltWeatherCAN.entitlements; path = AltWeatherCAN/AltWeatherCAN.entitlements; sourceTree = "<group>"; };
+		37F32CE12E1C2492007C8AE5 /* Seven DayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Seven DayExtension.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -159,6 +161,8 @@
 		3762DE682CCD7308005539C2 = {
 			isa = PBXGroup;
 			children = (
+				37F32CE12E1C2492007C8AE5 /* Seven DayExtension.entitlements */,
+				37F32CDF2E1C23DF007C8AE5 /* AltWeatherCAN.entitlements */,
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
 				37136AA52CDFFE9E00A74186 /* AltWeatherCANTests */,
 				374B21542D95E7D600B73804 /* Seven Day */,
@@ -401,6 +405,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Seven DayExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -428,6 +433,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "Seven DayExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -576,6 +582,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AltWeatherCAN/AltWeatherCAN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
@@ -607,6 +614,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AltWeatherCAN/AltWeatherCAN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
