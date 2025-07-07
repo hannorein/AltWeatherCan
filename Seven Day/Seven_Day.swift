@@ -26,7 +26,10 @@ struct Provider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        SimpleEntry(date: Date(), forecastGroup: nil, configuration: configuration)
+        let dataDownloader = DataDownloader()
+        let citypage = dataDownloader.getDummyCitypage()
+        let forecastGroup = citypage.forecastGroup
+        return SimpleEntry(date: Date(), forecastGroup: forecastGroup, configuration: configuration)
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
@@ -83,7 +86,11 @@ struct Seven_DayEntryView : View {
 //            Text(entry.date, style: .time)
 //            
             Horizontal7DayViewForWidget(forecastGroup: entry.forecastGroup)
+                
         }
+        
+        
+
     }
 }
 
@@ -93,27 +100,24 @@ struct Seven_Day: Widget {
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
             Seven_DayEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(.background, for: .widget)
+                .dynamicTypeSize(.medium)
         }
-    }
-}
-
-extension ConfigurationAppIntent {
-    fileprivate static var smiley: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "😀"
-        return intent
-    }
-    
-    fileprivate static var starEyes: ConfigurationAppIntent {
-        let intent = ConfigurationAppIntent()
-        intent.favoriteEmoji = "🤩"
-        return intent
+        .configurationDisplayName("Forecast")
+        .description("See the 7 day forecast at a glance! The widget shows the forecast for the location currently selected in the AltWeatherCAN app.")
+        .supportedFamilies([
+            //.systemSmall,
+            .systemMedium
+           // .systemLarge,
+            ])
     }
 }
 
 #Preview(as: .systemMedium) {
     Seven_Day()
 } timeline: {
-    SimpleEntry(date: .now, forecastGroup: nil, configuration: .smiley)
+    let dataDownloader = DataDownloader()
+    let citypage = dataDownloader.getDummyCitypage()
+    let forecastGroup = citypage.forecastGroup
+    SimpleEntry(date: .now, forecastGroup: forecastGroup, configuration: ConfigurationAppIntent())
 }

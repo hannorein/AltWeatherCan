@@ -52,6 +52,12 @@ actor DataDownloader {
         return try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
     }
     
+    nonisolated func getDummyCitypage() -> Citypage {
+        let stationUrl = Bundle.main.url(forResource: "s0000630_e", withExtension: "xml")!
+        let sourceXML = try! String( contentsOf: stationUrl, encoding: .utf8)
+        return try! XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
+    }
+    
     func getAvailableSites() async throws -> [Site] {
         var newSites: [Site] = []
         let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv")!, encoding: .utf8)
