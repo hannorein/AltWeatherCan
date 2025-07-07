@@ -32,6 +32,7 @@ struct LocationView : View {
                         if site != appManager.selectedSite {
                             appManager.selectedSite = site
                             appManager.citypage = nil
+                            appManager.status = .loading
                             Task {
                                 await appManager.refresh()
                             }
