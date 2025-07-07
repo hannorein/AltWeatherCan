@@ -28,7 +28,6 @@ struct Provider: AppIntentTimelineProvider {
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 1 {
-            // Note: not working. needs to be a suite!
             let defaults = UserDefaults.sharedDefaults
             
             var site = Site(code: "s0000630", name: "Default", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
@@ -72,15 +71,8 @@ struct Seven_DayEntryView : View {
 
     var body: some View {
         VStack {
-//            Text("Time:")
-//            Text(entry.date, style: .time)
-//            
             Horizontal7DayViewForWidget(forecastGroup: entry.forecastGroup)
-                
         }
-        
-        
-
     }
 }
 
@@ -97,7 +89,7 @@ struct Seven_Day: Widget {
         .description("See the 7 day forecast at a glance! The widget shows the forecast for the location currently selected in the AltWeatherCAN app.")
         .supportedFamilies([
             //.systemSmall,
-            .systemMedium
+            .systemMedium,
            // .systemLarge,
             ])
     }
