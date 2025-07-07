@@ -10,16 +10,6 @@ import XMLCoder
 import CoreLocation
 import WidgetKit
 
-extension UserDefaults {
-    static var sharedDefaults: UserDefaults {
-        guard let defaults = UserDefaults(suiteName: "group.de.hanno-rein.AltWeatherCAN") else {
-            fatalError("Could not create shared UserDefaults")
-        }
-        return defaults
-    }
-}
-
-
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var manager : CLLocationManager
     weak var appManager : AppManager? = nil

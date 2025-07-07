@@ -13,6 +13,8 @@
 		374B21532D95E7D600B73804 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 374B21522D95E7D600B73804 /* SwiftUI.framework */; };
 		374B216C2D95EC9600B73804 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 374B216B2D95EC9600B73804 /* XMLCoder */; };
 		3762DE8A2CCD75D1005539C2 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 3762DE892CCD75D1005539C2 /* XMLCoder */; };
+		37F32CE52E1C4F86007C8AE5 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F32CE42E1C4F86007C8AE5 /* UserDefaultsExtension.swift */; };
+		37F32CE62E1C4F93007C8AE5 /* UserDefaultsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F32CE42E1C4F86007C8AE5 /* UserDefaultsExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,7 @@
 		3762DE712CCD7308005539C2 /* AltWeatherCAN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltWeatherCAN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37F32CDF2E1C23DF007C8AE5 /* AltWeatherCAN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AltWeatherCAN.entitlements; path = AltWeatherCAN/AltWeatherCAN.entitlements; sourceTree = "<group>"; };
 		37F32CE12E1C2492007C8AE5 /* Seven DayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Seven DayExtension.entitlements"; sourceTree = "<group>"; };
+		37F32CE42E1C4F86007C8AE5 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -161,6 +164,7 @@
 		3762DE682CCD7308005539C2 = {
 			isa = PBXGroup;
 			children = (
+				37F32CE42E1C4F86007C8AE5 /* UserDefaultsExtension.swift */,
 				37F32CE12E1C2492007C8AE5 /* Seven DayExtension.entitlements */,
 				37F32CDF2E1C23DF007C8AE5 /* AltWeatherCAN.entitlements */,
 				3762DE732CCD7308005539C2 /* AltWeatherCan */,
@@ -338,6 +342,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37F32CE62E1C4F93007C8AE5 /* UserDefaultsExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,6 +350,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37F32CE52E1C4F86007C8AE5 /* UserDefaultsExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

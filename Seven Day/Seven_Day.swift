@@ -10,16 +10,6 @@ import SwiftUI
 
 let appCornerRadius : CGFloat = 5
 
-extension UserDefaults {
-    static var sharedDefaults: UserDefaults {
-        guard let defaults = UserDefaults(suiteName: "group.de.hanno-rein.AltWeatherCAN") else {
-            fatalError("Could not create shared UserDefaults")
-        }
-        return defaults
-    }
-}
-
-
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
         SimpleEntry(date: Date(), forecastGroup: nil, configuration: ConfigurationAppIntent())
