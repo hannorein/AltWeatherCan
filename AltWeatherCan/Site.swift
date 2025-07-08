@@ -14,4 +14,5 @@ struct Site : Identifiable, Hashable, Codable {
     let latitude : Double?
     let longitude : Double?
     var distance : Measurement<UnitLength>?
+    var closestRadarStation : RadarStation?
 }

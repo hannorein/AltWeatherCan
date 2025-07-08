@@ -7,6 +7,7 @@
 
 import Foundation
 import XMLCoder
+import CoreLocation
 
 actor DataDownloader {
     private func getCityPageURL(site: Site) throws -> URL {
@@ -66,15 +67,38 @@ actor DataDownloader {
         rows.removeFirst()
         rows.removeFirst()
         
+        let radarStations = getAvailableRadarStations()
+        
         for row in rows {
             let columns = row.components(separatedBy: ",")
             if columns.count >= 5 {
                 let latitude = Double(columns[3].replacingOccurrences(of: "N", with: ""))
                 let longitude = Double("-"+columns[4].replacingOccurrences(of: "W", with: "")) // Hard coded for Canada
-                let site = Site(code: columns[0], name: columns[1], province: columns[2], latitude: latitude, longitude: longitude, distance: nil)
+                var closestRadarStation : RadarStation? = nil
+                var cd = 1000000000.0
+                if let latitude, let longitude {
+                    for radarStation in radarStations {
+                        let sl = CLLocation(latitude: latitude, longitude: longitude)
+                        let rl = CLLocation(latitude: radarStation.latitude, longitude: radarStation.longitude)
+                        let nd = sl.distance(from: rl)
+                        if nd < cd {
+                            closestRadarStation = radarStation
+                            cd = nd
+                        }
+                    }
+                }
+                let site = Site(code: columns[0], name: columns[1], province: columns[2], latitude: latitude, longitude: longitude, distance: nil, closestRadarStation: closestRadarStation)
                 newSites.append(site)
             }
         }
         return newSites
+    }
+    
+    func getAvailableRadarStations() -> [RadarStation] {
+        let url = Bundle.main.url(forResource: "radarstations", withExtension: "json")!
+        let data = try! Data(contentsOf: url)
+        let decoder = JSONDecoder()
+        let radarStations = try! decoder.decode([RadarStation].self, from: data)
+        return radarStations
     }
 }

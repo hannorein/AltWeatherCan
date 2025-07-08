@@ -1,0 +1,258 @@
+[
+    {
+        "name": "Radisson",
+        "code": "CASRA",
+        "latitude": 52.52048,
+        "longitude": -107.44269,
+        "region": "Saskatoon/North Battleford",
+        "province": "SK"
+    },
+    {
+        "name": "Blainville",
+        "code": "CASBV",
+        "latitude": 45.70628,
+        "longitude": -73.85892,
+        "region": "Montreal",
+        "province": "QC"
+    },
+    {
+        "name": "Foxwarren",
+        "code": "CASFW",
+        "latitude": 50.548748,
+        "longitude": -101.08563,
+        "region": "Eastern Sask. /Western Manitoba",
+        "province": "MB"
+    },
+    {
+        "name": "Spirit River",
+        "code": "CASSR",
+        "latitude": 55.694942,
+        "longitude": -119.230432,
+        "region": "Grand Prairie",
+        "province": "AB"
+    },
+    {
+        "name": "Smooth Rock Falls",
+        "code": "CASRF",
+        "latitude": 49.28126,
+        "longitude": -81.79385,
+        "region": "Northeastern Ontario",
+        "province": "ON"
+    },
+    {
+        "name": "Exeter",
+        "code": "CASET",
+        "latitude": 43.372425,
+        "longitude": -81.380698,
+        "region": "South Western Ontario",
+        "province": "ON"
+    },
+    {
+        "name": "Bethune",
+        "code": "CASBE",
+        "latitude": 50.571232,
+        "longitude": -105.182848,
+        "region": "Regina/Moose Jaw",
+        "province": "SK"
+    },
+    {
+        "name": "Chipman",
+        "code": "CASCM",
+        "latitude": 46.222378,
+        "longitude": -65.699294,
+        "region": "Fredericton",
+        "province": "NB"
+    },
+    {
+        "name": "Marion Bridge",
+        "code": "CASMB",
+        "latitude": 45.949718,
+        "longitude": -60.205246,
+        "region": "Cape Breton",
+        "province": "NS"
+    },
+    {
+        "name": "Montreal River Harbour",
+        "code": "CASMR",
+        "latitude": 47.247807,
+        "longitude": -84.596686,
+        "region": "Superior East",
+        "province": "ON"
+    },
+    {
+        "name": "Strathmore",
+        "code": "CASSM",
+        "latitude": 51.20613,
+        "longitude": -113.399366,
+        "region": "Calgary",
+        "province": "AB"
+    },
+    {
+        "name": "Landrienne",
+        "code": "CASLA",
+        "latitude": 48.551355,
+        "longitude": -77.808086,
+        "region": "Val d'Or",
+        "province": "QC"
+    },
+    {
+        "name": "Schuler",
+        "code": "CASSU",
+        "latitude": 50.312503,
+        "longitude": -110.195362,
+        "region": "Medicine Hat",
+        "province": "AB"
+    },
+    {
+        "name": "Dryden",
+        "code": "CASDR",
+        "latitude": 49.858047,
+        "longitude": -92.797566,
+        "region": "North Western Ontario",
+        "province": "ON"
+    },
+    {
+        "name": "Holyrood",
+        "code": "CASHR",
+        "latitude": 47.326604,
+        "longitude": -53.12667,
+        "region": "Eastern Newfoundland and Labrador",
+        "province": "NF&L"
+    },
+    {
+        "name": "Ste-Francoise",
+        "code": "CASSF",
+        "latitude": 46.449476,
+        "longitude": -71.913832,
+        "region": "Qu\u00e9bec",
+        "province": "QC"
+    },
+    {
+        "name": "Woodlands",
+        "code": "CASWL",
+        "latitude": 50.153001,
+        "longitude": -97.780482,
+        "region": "Winnipeg",
+        "province": "MB"
+    },
+    {
+        "name": "Val d'Ir\u00e8ne",
+        "code": "CASVD",
+        "latitude": 48.480468,
+        "longitude": -67.601036,
+        "region": "Lower St. Lawrence",
+        "province": "QC"
+    },
+    {
+        "name": "Aldergrove",
+        "code": "CASAG",
+        "latitude": 49.01644,
+        "longitude": -122.48736,
+        "region": "Vancouver",
+        "province": "BC"
+    },
+    {
+        "name": "Britt",
+        "code": "CASBI",
+        "latitude": 45.79309,
+        "longitude": -80.53414,
+        "region": "Georgian Bay",
+        "province": "ON"
+    },
+    {
+        "name": "Carvel",
+        "code": "CASCV",
+        "latitude": 53.56061,
+        "longitude": -114.14447,
+        "region": "Edmonton",
+        "province": "AB"
+    },
+    {
+        "name": "Franktown",
+        "code": "CASFT",
+        "latitude": 45.04115,
+        "longitude": -76.11638,
+        "region": "Eastern Ontario",
+        "province": "ON"
+    },
+    {
+        "name": "Gore",
+        "code": "CASGO",
+        "latitude": 45.09818,
+        "longitude": -63.70494,
+        "region": "Halifax",
+        "province": "NS"
+    },
+    {
+        "name": "King City",
+        "code": "CASKR",
+        "latitude": 43.96366,
+        "longitude": -79.57288,
+        "region": "Southern Ontario",
+        "province": "ON"
+    },
+    {
+        "name": "Cold Lake",
+        "code": "CASCL",
+        "latitude": 54.37888,
+        "longitude": -110.06138,
+        "region": "NW Saskatchewan/NE Alberta",
+        "province": "SK"
+    },
+    {
+        "name": "Shuniah",
+        "code": "CASSN",
+        "latitude": 48.596001,
+        "longitude": -89.100038,
+        "region": "Superior West",
+        "province": "ON"
+    },
+    {
+        "name": "Fort McMurray",
+        "code": "CASFM",
+        "latitude": 56.375628,
+        "longitude": -111.21515,
+        "region": "Lower Athabasca",
+        "province": "AB"
+    },
+    {
+        "name": "Marble Mountain",
+        "code": "CASMM",
+        "latitude": 48.930228,
+        "longitude": -57.834579,
+        "region": "Western Newfoundland and Labrador",
+        "province": "NF&L"
+    },
+    {
+        "name": "Silver Star Mountain",
+        "code": "CASSS",
+        "latitude": 50.369109,
+        "longitude": -119.064196,
+        "region": "Southern Interior B.C.",
+        "province": "BC"
+    },
+    {
+        "name": "Prince George",
+        "code": "CASPG",
+        "latitude": 53.61539,
+        "longitude": -122.95469,
+        "region": "Central Interior B.C.",
+        "province": "BC"
+    },
+    {
+        "name": "Mt. Apica",
+        "code": "CASMA",
+        "latitude": 47.977908,
+        "longitude": -71.430833,
+        "region": "Saguenay",
+        "province": "QC"
+    },
+    {
+        "name": "Halfmoon Peak",
+        "code": "CASHP",
+        "latitude": 49.526953,
+        "longitude": -123.853638,
+        "region": "Victoria, Northern Strait of Georgia, BC",
+        "province": "BC"
+    }
+]

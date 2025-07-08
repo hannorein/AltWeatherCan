@@ -65,6 +65,7 @@
 			membershipExceptions = (
 				Citypage.swift,
 				DataDownloader.swift,
+				radarstations.json,
 				Site.swift,
 			);
 			target = 37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */;
@@ -82,6 +83,8 @@
 				Citypage.swift,
 				DataDownloader.swift,
 				Horizontal7DayView.swift,
+				RadarStation.swift,
+				radarstations.json,
 				s0000630_e.xml,
 				Site.swift,
 				WeatherIcons.xcassets,
