@@ -46,6 +46,21 @@ actor DataDownloader {
         throw NSError(domain: "getCityPageURL failed to find URL", code: 1, userInfo: nil)
     }
     
+    func getLatestRadarImageUrl(radarStation: RadarStation) -> URL? {
+        let directory_url = "https://dd.meteo.gc.ca/today/radar/CAPPI/GIF/\(radarStation.code)/?C=M;O=D"
+        guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
+            print("Download error")
+            return nil
+        }
+        guard let file_pattern = try? Regex("20[^\"]*_RAIN.gif") else{
+            print("Regex error")
+            return nil
+        }
+        let match = html_content.firstMatch(of: file_pattern)!
+        let image_url = "https://dd.meteo.gc.ca/today/radar/CAPPI/GIF/\(radarStation.code)/\(match.0)"
+        return URL(string: image_url)!
+    }
+    
     func getCitypage(site: Site) async throws -> Citypage {
         let stationUrl = try getCityPageURL(site: site)
         print("Getting \(stationUrl)")

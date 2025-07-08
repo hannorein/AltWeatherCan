@@ -62,6 +62,12 @@ struct MainView : View {
                         Image("7day24x24")
                             .renderingMode(.template)
                     }
+                RadarView()
+                    .tabItem {
+                        Text("Radar")
+                        Image("radar24x24")
+                            .renderingMode(.template)
+                    }
                 AboutView()
                     .tabItem {
                         Text("ABOUT")

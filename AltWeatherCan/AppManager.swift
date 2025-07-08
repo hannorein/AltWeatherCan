@@ -9,6 +9,7 @@ import Foundation
 import XMLCoder
 import CoreLocation
 import WidgetKit
+import SwiftUI
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var manager : CLLocationManager
@@ -53,6 +54,7 @@ class AppManager : ObservableObject {
     @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37, distance: nil)
     @Published var status : AltWeatherCanStatus = .loading
     @Published var location : CLLocation? = nil
+    @Published var latestRadarImageURL : URL? = nil
     var previousSites : [Site] = []
     private var closestSite : Site? = nil
     private let dataDownloader: DataDownloader
@@ -127,8 +129,14 @@ class AppManager : ObservableObject {
             }else{
                 print("encoding error previousSites")
             }
+            if let closestRadarStation = selectedSite.closestRadarStation {
+                latestRadarImageURL = await dataDownloader.getLatestRadarImageUrl(radarStation: closestRadarStation)
+            }else{
+                latestRadarImageURL = nil
+            }
         }catch {
             self.status = .error
+            latestRadarImageURL = nil
             print("download error: \(error)")
         }
     }

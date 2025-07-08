@@ -7,8 +7,7 @@
 
 import Foundation
 
-struct RadarStation : Codable, Equatable, Hashable {
-    var id = UUID()
+struct RadarStation : Codable, Hashable {
     let name: String
     let latitude: Double
     let longitude: Double
