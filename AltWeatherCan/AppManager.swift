@@ -133,15 +133,19 @@ class AppManager : ObservableObject {
             }else{
                 print("encoding error previousSites")
             }
-            if let closestRadarStation = selectedSite.closestRadarStation {
-                latestRadarImageURL = await dataDownloader.getLatestRadarImageUrl(radarStation: closestRadarStation)
-            }else{
-                latestRadarImageURL = nil
-            }
+            await self.refreshRadarImageURL()
         }catch {
             self.status = .error
             latestRadarImageURL = nil
             print("download error: \(error)")
+        }
+    }
+    
+    func refreshRadarImageURL() async {
+        if let closestRadarStation = selectedSite.closestRadarStation {
+            latestRadarImageURL = await dataDownloader.getLatestRadarImageUrl(radarStation: closestRadarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
+        }else{
+            latestRadarImageURL = nil
         }
     }
     

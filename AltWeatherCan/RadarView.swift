@@ -34,10 +34,7 @@ struct RadarView : View {
                                         .aspectRatio(contentMode: .fit)
                                         .scaleEffect(currentScale)
                                         .offset(currentOffset)
-                                    //                                        .animation(.interactiveSpring(), value: currentScale) // Smooth animation for scaling
-                                    //                                        .animation(.interactiveSpring(), value: currentOffset) // Smooth animation for offsetting
                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    //                                        .contentShape(Rectangle()) // Makes the whole area tappable for gestures
                                         .gesture(
                                             DragGesture()
                                                 .onChanged { value in
@@ -73,18 +70,39 @@ struct RadarView : View {
                                         )
                                         .clipped()
                                         .contentShape(Rectangle())
-                                    
                                 case .failure:
-                                    Text("An error occurred while downloading the radar image.")
+                                    Rectangle()
+                                        .foregroundStyle(.clear)
+                                        .aspectRatio(580.0/480.0, contentMode: .fit)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .overlay {
+                                            Label("An error occurred while downloading the radar image.", systemImage:"exclamationmark.icloud.fill")
+                                                .padding()
+                                        }
                                 default:
-                                    ProgressView()
-                                        .frame(width: 50, height: 50)
+                                    Rectangle()
+                                        .foregroundStyle(.clear)
+                                        .aspectRatio(580.0/480.0, contentMode: .fit)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        .overlay {
+                                            VStack{
+                                                ProgressView()
+                                                    .tint(.white)
+                                                Text("Loading radar image...")
+                                            }
+                                        }
                                 }
                             }
                             
                         }else{
-                            Text("No radar image available. This might be due to a connection issue or due to the \(radarStation.name) radar station undergoing maintenance. Please try a different station.")
-                                .padding(.vertical)
+                            Rectangle()
+                                .foregroundStyle(.clear)
+                                .aspectRatio(580.0/480.0, contentMode: .fit)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .overlay {
+                                    Label("No radar image available. This might be due to a connection issue or due to the \(radarStation.name) radar station undergoing maintenance. Please try a different station.", systemImage:"exclamationmark.icloud.fill")
+                                        .padding()
+                                }
                         }
                         
                         VStack{
@@ -96,8 +114,12 @@ struct RadarView : View {
                                         .tag(type)
                                 }
                             }
+                           
                             .pickerStyle(.menu)
                             .tint(.white)
+                            .task(id: appManager.radarType) {
+                                await appManager.refreshRadarImageURL()
+                            }
                             
                             Label { Text("Precipitation")} icon:{
                                 Image(systemName: "cloud.rain.fill")
@@ -113,8 +135,12 @@ struct RadarView : View {
                                         .tag(type)
                                 }
                             }
+                            .disabled(appManager.radarType == .ACCUM)
                             .pickerStyle(.menu)
                             .tint(.white)
+                            .task(id: appManager.radarPrecipitation) {
+                                await appManager.refreshRadarImageURL()
+                            }
                         }
                         .padding()
                         

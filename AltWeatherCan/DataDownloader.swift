@@ -46,18 +46,22 @@ actor DataDownloader {
         throw NSError(domain: "getCityPageURL failed to find URL", code: 1, userInfo: nil)
     }
     
-    func getLatestRadarImageUrl(radarStation: RadarStation) -> URL? {
-        let directory_url = "https://dd.meteo.gc.ca/today/radar/CAPPI/GIF/\(radarStation.code)/?C=M;O=D"
+    func getLatestRadarImageUrl(radarStation: RadarStation, radarType: RadarType, radarPrecipitation: RadarPrecipitation) -> URL? {
+        let directory_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
         guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
             print("Download error for \(directory_url)")
             return nil
         }
-        guard let file_pattern = try? Regex("20[^\"]*_RAIN.gif") else{
+        let url_end = (radarType != .ACCUM) ? "(?i)\(radarPrecipitation.urlComponent)" : "Accum24h"
+        guard let file_pattern = try? Regex("20[^\"]*_\(url_end).gif") else{
             print("Regex error")
             return nil
         }
-        let match = html_content.firstMatch(of: file_pattern)!
-        let image_url = "https://dd.meteo.gc.ca/today/radar/CAPPI/GIF/\(radarStation.code)/\(match.0)"
+        guard let match = html_content.firstMatch(of: file_pattern) else {
+            print("Regex no match found")
+            return nil
+        }
+        let image_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
         return URL(string: image_url)!
     }
     

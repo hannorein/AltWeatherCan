@@ -24,13 +24,32 @@ enum RadarType: CaseIterable, Identifiable, CustomStringConvertible{
             return "24h Accumulation"
         }
     }
+    var urlComponent: String {
+        switch self {
+        case .CAPPI:
+            return "CAPPI"
+        case .DPQPE:
+            return "DPQPE"
+        case .ACCUM:
+            return "24_HR_ACCUM"
+        }
+    }
 }
 
 enum RadarPrecipitation: CaseIterable, Identifiable{
     case Rain
-    case Show
+    case Snow
 
     var id: Self { self }
+    
+    var urlComponent: String {
+        switch self {
+        case .Rain:
+            return "RAIN"
+        case .Snow:
+            return "SNOW"
+        }
+    }
 }
 
 
