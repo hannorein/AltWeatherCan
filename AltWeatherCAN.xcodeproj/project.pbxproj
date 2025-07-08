@@ -64,6 +64,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Citypage.swift,
+				DataDownloader.swift,
 				Site.swift,
 			);
 			target = 37136AA32CDFFE9E00A74186 /* AltWeatherCANTests */;

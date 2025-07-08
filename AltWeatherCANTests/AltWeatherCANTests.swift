@@ -12,7 +12,8 @@ import XMLCoder
 struct AltWeatherCANTests {
 
     @Test func getAllSites() async throws {
-        let sites = Site.getAvailableSites()
+        let dataDownLoader = DataDownloader()
+        let sites = try await dataDownLoader.getAvailableSites()
         try #require(sites.count > 0, "No sites found.")
         #expect(sites.count(where: { s in
             s.name == "Toronto"
@@ -20,11 +21,8 @@ struct AltWeatherCANTests {
         
         // Getting and parsing all station data. This may take a while.
         for (index, site) in sites.enumerated() {
-            let stationUrl = "https://dd.weather.gc.ca/citypage_weather/xml/"+site.province+"/"+site.code+"_e.xml"
-            print("Getting \(index+1)/\(sites.count): \(stationUrl)")
-            let sourceXML = try String(contentsOf: URL(string: stationUrl)!, encoding: .utf8)
-            
-            let citypage = try XMLDecoder().decode(Citypage.self, from: Data(sourceXML.utf8))
+            print("Getting \(index+1)/\(sites.count)")
+            let citypage = try await dataDownLoader.getCitypage(site: site)
             if citypage.currentConditions == nil {
                 print("No current conditions found.")
             }
