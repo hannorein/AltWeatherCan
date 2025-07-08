@@ -12,6 +12,12 @@ struct RadarView : View {
     @State private var finalScale: CGFloat = 1.0 // Stores scale after gesture ends
     @State private var currentOffset: CGSize = .zero
     @State private var finalOffset: CGSize = .zero // Stores offset after gesture ends
+    //    init() {
+    //        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+    //        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+    //        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.accentColor)
+    //        UISegmentedControl.appearance().backgroundColor = UIColor.clear // Overall background color
+    //    }
     
     var body: some View {
         HStack{
@@ -19,6 +25,7 @@ struct RadarView : View {
             VStack{
                 if let radarStation = appManager.selectedSite.closestRadarStation {
                     ScrollView(.vertical) {
+                        Text("Radar for \(radarStation.region) (\(radarStation.name)).")
                         if let imageURL = appManager.latestRadarImageURL {
                             AsyncImage(url: imageURL){ phase in
                                 switch phase {
@@ -27,10 +34,10 @@ struct RadarView : View {
                                         .aspectRatio(contentMode: .fit)
                                         .scaleEffect(currentScale)
                                         .offset(currentOffset)
-//                                        .animation(.interactiveSpring(), value: currentScale) // Smooth animation for scaling
-//                                        .animation(.interactiveSpring(), value: currentOffset) // Smooth animation for offsetting
+                                    //                                        .animation(.interactiveSpring(), value: currentScale) // Smooth animation for scaling
+                                    //                                        .animation(.interactiveSpring(), value: currentOffset) // Smooth animation for offsetting
                                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                                        .contentShape(Rectangle()) // Makes the whole area tappable for gestures
+                                    //                                        .contentShape(Rectangle()) // Makes the whole area tappable for gestures
                                         .gesture(
                                             DragGesture()
                                                 .onChanged { value in
@@ -66,7 +73,7 @@ struct RadarView : View {
                                         )
                                         .clipped()
                                         .contentShape(Rectangle())
-
+                                    
                                 case .failure:
                                     Text("An error occurred while downloading the radar image.")
                                 default:
@@ -74,10 +81,43 @@ struct RadarView : View {
                                         .frame(width: 50, height: 50)
                                 }
                             }
-                            Text("Radar for \(radarStation.region) (\(radarStation.name)).")
+                            
                         }else{
                             Text("No radar image available. This might be due to a connection issue or due to the \(radarStation.name) radar station undergoing maintenance. Please try a different station.")
+                                .padding(.vertical)
                         }
+                        
+                        VStack{
+                            Label("Radar type", image: "radar24x24")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Picker("Radar type", selection: $appManager.radarType) {
+                                ForEach(RadarType.allCases, id: \.self) { type in
+                                    Text(String(describing: type))
+                                        .tag(type)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(.white)
+                            
+                            Label { Text("Precipitation")} icon:{
+                                Image(systemName: "cloud.rain.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top)
+                            Picker("Precipitation", selection: $appManager.radarPrecipitation) {
+                                ForEach(RadarPrecipitation.allCases, id: \.self) { type in
+                                    Text("\(type)")
+                                        .tag(type)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .tint(.white)
+                        }
+                        .padding()
+                        
                     }
                     .refreshable {
                         await appManager.refresh()

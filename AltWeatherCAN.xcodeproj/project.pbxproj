@@ -595,7 +595,6 @@
 				CODE_SIGN_ENTITLEMENTS = AltWeatherCAN/AltWeatherCAN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
-				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AltWeatherCan/Info.plist;
@@ -627,7 +626,6 @@
 				CODE_SIGN_ENTITLEMENTS = AltWeatherCAN/AltWeatherCAN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
-				DEVELOPMENT_ASSET_PATHS = "\"AltWeatherCan/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AltWeatherCan/Info.plist;

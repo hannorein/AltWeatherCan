@@ -46,6 +46,8 @@ enum AltWeatherCanStatus {
     case error
 }
 
+
+
 @MainActor
 class AppManager : ObservableObject {
     
@@ -55,6 +57,8 @@ class AppManager : ObservableObject {
     @Published var status : AltWeatherCanStatus = .loading
     @Published var location : CLLocation? = nil
     @Published var latestRadarImageURL : URL? = nil
+    @Published var radarType : RadarType = .DPQPE
+    @Published var radarPrecipitation : RadarPrecipitation = .Rain
     var previousSites : [Site] = []
     private var closestSite : Site? = nil
     private let dataDownloader: DataDownloader
