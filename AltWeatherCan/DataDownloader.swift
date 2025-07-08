@@ -49,7 +49,7 @@ actor DataDownloader {
     func getLatestRadarImageUrl(radarStation: RadarStation) -> URL? {
         let directory_url = "https://dd.meteo.gc.ca/today/radar/CAPPI/GIF/\(radarStation.code)/?C=M;O=D"
         guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
-            print("Download error")
+            print("Download error for \(directory_url)")
             return nil
         }
         guard let file_pattern = try? Regex("20[^\"]*_RAIN.gif") else{
