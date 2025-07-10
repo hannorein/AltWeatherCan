@@ -186,7 +186,7 @@ struct RadarView : View {
                             .task(id: appManager.selectedRadarStation) {
                                 await appManager.refreshRadarImageURL()
                             }
-
+                            
                         }
                         .padding(.vertical, 8)
                         .padding(.horizontal, 5)
