@@ -54,9 +54,17 @@ struct RadarView : View {
                 if let radarStation = appManager.selectedSite.closestRadarStation {
                     ScrollView(.vertical) {
                         if appManager.latestRadarImages.count != 0 {
-                            let imageURL = appManager.latestRadarImages[min(index, appManager.latestRadarImages.count-1)].url
-                            RadarImageView(imageURL: imageURL)
-                            
+                            let radarImage = appManager.latestRadarImages[min(index, appManager.latestRadarImages.count-1)]
+                            RadarImageView(radarImage: radarImage)
+                                .onAppear(perform: {
+                                    appManager.latestRadarImages[index].requestImage()
+                                })
+                                .onChange(of: index) {
+                                    appManager.latestRadarImages[index].requestImage()
+                                }
+                                .onChange(of: appManager.latestRadarImages) {
+                                    appManager.latestRadarImages[index].requestImage()
+                                }
                         }else{
                             Rectangle()
                                 .foregroundStyle(.clear)
@@ -84,10 +92,16 @@ struct RadarView : View {
                             .padding(.horizontal, 5)
                             if let radarImage = appManager.latestRadarImages[safe: index] {
                                 Text("Observed on ") + Text(radarImage.date, format: .dateTime.weekday(.wide).day().month(.wide).hour().minute().timeZone())
+                                    .monospacedDigit()
                             }else{
                                 Text("No image available.")
                             }
-                            FrameSlider(intValue: $index, maxValue: Double(appManager.latestRadarImages.count-1))
+
+                            FrameSlider(intValue: $index, maxValue: appManager.latestRadarImages.count-1)
+                                .disabled(appManager.latestRadarImages.count == 0)
+                                .controlSize(.large) // Makes the system style larger
+                                .buttonStyle(.bordered)
+                                .foregroundStyle(colourIcons)
                                 .padding(.horizontal)
                             
                             HStack{
@@ -102,6 +116,9 @@ struct RadarView : View {
                                     .frame(maxWidth: .infinity)
                                 }else{
                                     Button {
+                                        appManager.latestRadarImages.forEach { image in
+                                            image.requestImage()
+                                        }
                                         timerIsRunning  = true
                                         connectTimer()
                                     } label: {
@@ -171,6 +188,8 @@ struct RadarView : View {
                             .frame(maxWidth: .infinity)
                             .tint(.black)
                             .task(id: appManager.radarType) {
+                                timerIsRunning = false
+                                disconnectTimer()
                                 await appManager.refreshRadarImageURL()
                             }
                             
@@ -202,6 +221,8 @@ struct RadarView : View {
                             .frame(maxWidth: .infinity)
                             .tint(.black)
                             .task(id: appManager.radarPrecipitation) {
+                                timerIsRunning = false
+                                disconnectTimer()
                                 await appManager.refreshRadarImageURL()
                             }
                             
@@ -231,6 +252,8 @@ struct RadarView : View {
                             .frame(maxWidth: .infinity)
                             .tint(.black)
                             .task(id: appManager.selectedRadarStation) {
+                                timerIsRunning = false
+                                disconnectTimer()
                                 await appManager.refreshRadarImageURL()
                             }
                             
@@ -274,13 +297,12 @@ struct RadarImageView : View {
     @State private var finalScale: CGFloat = 1.0
     @State private var currentOffset: CGSize = .zero
     @State private var finalOffset: CGSize = .zero
-    var imageURL: URL
+    @ObservedObject var radarImage: RadarImage
     
     var body: some View {
-        AsyncImage(url: imageURL){ phase in
-            switch phase {
-            case .success(let image):
-                image.resizable()
+        if let image = radarImage.image {
+            Image(uiImage: image)
+                .resizable()
                     .aspectRatio(contentMode: .fit)
                     .scaleEffect(currentScale)
                     .offset(currentOffset)
@@ -320,48 +342,38 @@ struct RadarImageView : View {
                     )
                     .clipped()
                     .contentShape(Rectangle())
-            case .failure:
-                Rectangle()
-                    .foregroundStyle(.clear)
-                    .aspectRatio(580.0/480.0, contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay {
-                        Label("An error occurred while downloading the radar image.", systemImage:"exclamationmark.icloud.fill")
-                            .padding()
+        }else{
+            Rectangle()
+                .foregroundStyle(.clear)
+                .aspectRatio(580.0/480.0, contentMode: .fit)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .overlay {
+                    VStack{
+                        ProgressView()
+                            .tint(.white)
+                        Text("Loading radar image...")
                     }
-            default:
-                Rectangle()
-                    .foregroundStyle(.clear)
-                    .aspectRatio(580.0/480.0, contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .overlay {
-                        VStack{
-                            ProgressView()
-                                .tint(.white)
-                            Text("Loading radar image...")
-                        }
-                    }
-            }
+                }
         }
     }
 }
 
+
+
+// Reverse slider for integer values that also works for empty ranges
 struct FrameSlider : View {
     @Binding var intValue: Int
-    var maxValue: Double
+    var maxValue: Int
     
     var body: some View {
         Slider(value: Binding(
-            get: { maxValue-Double(intValue) },
-            set: { intValue = Int(maxValue-$0.rounded()) }
+            get: { Double(maxValue-intValue) },
+            set: { intValue = Int(Double(maxValue)-$0.rounded()) }
         ),
-               in: 0.0...maxValue,
+               in: 0.0...Double(max(1,maxValue)),
                step: 1,
-               label: { Text("Animation speed") }
+               label: { Text("Frame") }
         )
-        .controlSize(.large) // Makes the system style larger
-        .buttonStyle(.bordered)
-        .foregroundStyle(colourIcons)
     }
 }
 

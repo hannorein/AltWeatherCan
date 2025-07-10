@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import Combine
+import SwiftUI
 
 enum RadarType: CaseIterable, Identifiable, CustomStringConvertible{
     case CAPPI
@@ -52,9 +54,57 @@ enum RadarPrecipitation: CaseIterable, Identifiable{
     }
 }
 
-struct RadarImage : Hashable {
-    let url: URL
-    let date: Date
+class RadarImage : ObservableObject, Hashable, Identifiable {
+    @Published var url: URL
+    @Published var date: Date
+    @Published var image: UIImage?
+    private var dataTask: URLSessionDataTask?
+
+    func requestImage() {
+        if image != nil {
+            return
+        }
+        if dataTask != nil {
+            return
+        }
+        dataTask = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            DispatchQueue.main.async { // Ensure UI updates on the main thread
+                if let error = error {
+                    // Check for task cancellation error
+                    if (error as NSError).code == NSURLErrorCancelled {
+                        print("Image download task cancelled.")
+                        return // Do not set an error if cancelled
+                    }
+                    self?.image = nil // Clear image on error
+                    return
+                }
+                
+                guard let data = data, let loadedImage = UIImage(data: data) else {
+                    print("Could not decode image or no data")
+                    self?.image = nil
+                    return
+                }
+                self?.image = loadedImage
+            }
+        }
+        dataTask?.resume() // Start the download
+    }
+    
+    static func == (lhs: RadarImage, rhs: RadarImage) -> Bool {
+        lhs.url == rhs.url
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(url)
+    }
+    
+    init(url: URL, date: Date) {
+        self.url = url
+        self.date = date
+        self.image = nil
+    }
+    deinit {
+         dataTask?.cancel()
+     }
 }
 
 struct RadarStation : Codable, Hashable {
