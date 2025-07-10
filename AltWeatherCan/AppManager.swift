@@ -59,6 +59,8 @@ class AppManager : ObservableObject {
     @Published var latestRadarImageURL : URL? = nil
     @Published var radarType : RadarType = .DPQPE
     @Published var radarPrecipitation : RadarPrecipitation = .Rain
+    @Published var selectedRadarStation : RadarStation? = nil
+    var availableRadarStations : [RadarStation] = []
     var previousSites : [Site] = []
     private var closestSite : Site? = nil
     private let dataDownloader: DataDownloader
@@ -66,16 +68,18 @@ class AppManager : ObservableObject {
 
 
     init() {
+        
         let defaults = UserDefaults.sharedDefaults
+        var _selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37, distance: nil)
         if let contentData = defaults.object(forKey: "defaultSite") as? Data,
             let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
-            selectedSite = defaultSite
+            _selectedSite = defaultSite
         }else{
             // Check for previously stored settings in standard UserDefaults. Can be removed in future.
             let defaults = UserDefaults.standard
             if let contentData = defaults.object(forKey: "defaultSite") as? Data,
                let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
-                selectedSite = defaultSite
+                _selectedSite = defaultSite
             }
         }
         if let contentData = defaults.object(forKey: "previousSites") as? Data,
@@ -89,7 +93,14 @@ class AppManager : ObservableObject {
                 previousSites = _previousSites
             }
         }
+        
+        
+        
         self.dataDownloader = DataDownloader()
+        self.selectedSite = _selectedSite
+        self.selectedRadarStation = _selectedSite.closestRadarStation
+        self.availableRadarStations = dataDownloader.getAvailableRadarStations()
+
         self.locationManager = LocationManager()
         
         self.locationManager.appManager = self
@@ -142,8 +153,10 @@ class AppManager : ObservableObject {
     }
     
     func refreshRadarImageURL() async {
-        if let closestRadarStation = selectedSite.closestRadarStation {
-            latestRadarImageURL = await dataDownloader.getLatestRadarImageUrl(radarStation: closestRadarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
+        let radarStation = selectedRadarStation ?? selectedSite.closestRadarStation
+        if let radarStation {
+            latestRadarImageURL = await dataDownloader.getLatestRadarImageUrl(radarStation: radarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
+            selectedRadarStation = radarStation
         }else{
             latestRadarImageURL = nil
         }

@@ -113,7 +113,7 @@ actor DataDownloader {
         return newSites
     }
     
-    func getAvailableRadarStations() -> [RadarStation] {
+    nonisolated func getAvailableRadarStations() -> [RadarStation] {
         let url = Bundle.main.url(forResource: "radarstations", withExtension: "json")!
         let data = try! Data(contentsOf: url)
         let decoder = JSONDecoder()

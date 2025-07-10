@@ -31,6 +31,7 @@ struct LocationView : View {
                     Button {
                         if site != appManager.selectedSite {
                             appManager.selectedSite = site
+                            appManager.selectedRadarStation = site.closestRadarStation
                             appManager.citypage = nil
                             appManager.status = .loading
                             Task {

@@ -25,7 +25,6 @@ struct RadarView : View {
             VStack{
                 if let radarStation = appManager.selectedSite.closestRadarStation {
                     ScrollView(.vertical) {
-                        Text("Radar for \(radarStation.region) (\(radarStation.name)).")
                         if let imageURL = appManager.latestRadarImageURL {
                             AsyncImage(url: imageURL){ phase in
                                 switch phase {
@@ -105,30 +104,47 @@ struct RadarView : View {
                                 }
                         }
                         
-                        VStack{
-                            Label("Radar type", image: "radar24x24")
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        VStack(alignment: .center){
+                            HStack{
+                                Image("radar24x24")
+                                    .colorMultiply(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Radar type")
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 5)
+                            
                             Picker("Radar type", selection: $appManager.radarType) {
                                 ForEach(RadarType.allCases, id: \.self) { type in
                                     Text(String(describing: type))
                                         .tag(type)
                                 }
                             }
-                           
                             .pickerStyle(.menu)
-                            .tint(.white)
+                            .frame(maxWidth: .infinity)
+                            .tint(.black)
                             .task(id: appManager.radarType) {
                                 await appManager.refreshRadarImageURL()
                             }
                             
-                            Label { Text("Precipitation")} icon:{
+                            Divider()
+                                .frame(height:4)
+                            
+                            
+                            HStack{
                                 Image(systemName: "cloud.rain.fill")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 24, height: 24)
+                                    .foregroundStyle(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Precipitation type")
+                                
+                                Spacer()
                             }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top)
+                            .padding(.horizontal, 5)
+                            
                             Picker("Precipitation", selection: $appManager.radarPrecipitation) {
                                 ForEach(RadarPrecipitation.allCases, id: \.self) { type in
                                     Text("\(type)")
@@ -137,12 +153,50 @@ struct RadarView : View {
                             }
                             .disabled(appManager.radarType == .ACCUM)
                             .pickerStyle(.menu)
-                            .tint(.white)
+                            .frame(maxWidth: .infinity)
+                            .tint(.black)
                             .task(id: appManager.radarPrecipitation) {
                                 await appManager.refreshRadarImageURL()
                             }
+                            
+                            Divider()
+                                .frame(height:4)
+                            
+                            HStack{
+                                Image(systemName: "mappin.and.ellipse")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundStyle(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Radar station")
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 5)
+                            
+                            Picker("Radar station", selection: $appManager.selectedRadarStation) {
+                                ForEach(appManager.availableRadarStations, id: \.self) { radarStation in
+                                    Text("\(radarStation.region) (\(radarStation.name))")
+                                        .tag(radarStation)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .frame(maxWidth: .infinity)
+                            .tint(.black)
+                            .task(id: appManager.selectedRadarStation) {
+                                await appManager.refreshRadarImageURL()
+                            }
+
                         }
-                        .padding()
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 5)
+                        .foregroundStyle(.black)
+                        .font(.footnote)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: appCornerRadius)
+                                .fill(.white)
+                        )
                         
                     }
                     .refreshable {
