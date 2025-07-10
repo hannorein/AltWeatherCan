@@ -52,6 +52,10 @@ enum RadarPrecipitation: CaseIterable, Identifiable{
     }
 }
 
+struct RadarImage : Hashable {
+    let url: URL
+    let date: Date
+}
 
 struct RadarStation : Codable, Hashable {
     let name: String

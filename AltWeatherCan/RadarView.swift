@@ -5,19 +5,47 @@
 //  Created by Hanno Rein on 2024-10-27.
 //
 import SwiftUI
+import Combine
+
+extension Array {
+    subscript(safe index: Int) -> Element? {
+        guard index >= 0, index < endIndex else {
+            return nil
+        }
+        return self[index]
+    }
+}
+
 
 struct RadarView : View {
     @EnvironmentObject var appManager : AppManager
-    @State private var currentScale: CGFloat = 1.0
-    @State private var finalScale: CGFloat = 1.0 // Stores scale after gesture ends
-    @State private var currentOffset: CGSize = .zero
-    @State private var finalOffset: CGSize = .zero // Stores offset after gesture ends
-    //    init() {
-    //        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
-    //        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-    //        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color.accentColor)
-    //        UISegmentedControl.appearance().backgroundColor = UIColor.clear // Overall background color
-    //    }
+    @State private var index : Int = 0
+    @State private var radarSpeed : Double = 0.4
+    @State private var timerCancellable: AnyCancellable?
+    @State private var timerIsRunning: Bool = false
+    
+    private var timerPublisher: AnyPublisher<Date, Never> {
+        Timer.publish(every: radarSpeed, on: .main, in: .common)
+            .autoconnect()
+            .eraseToAnyPublisher()
+    }
+    
+    private func connectTimer() {
+        disconnectTimer()
+        timerCancellable = timerPublisher
+            .sink { _ in
+                var nindex = self.index - 1
+                if nindex < 0 {
+                    nindex = self.appManager.latestRadarImages.count - 1
+                }
+                self.index = nindex
+            }
+    }
+    
+    private func disconnectTimer() {
+        timerCancellable?.cancel()
+        timerCancellable = nil
+    }
     
     var body: some View {
         HStack{
@@ -25,73 +53,9 @@ struct RadarView : View {
             VStack{
                 if let radarStation = appManager.selectedSite.closestRadarStation {
                     ScrollView(.vertical) {
-                        if let imageURL = appManager.latestRadarImageURL {
-                            AsyncImage(url: imageURL){ phase in
-                                switch phase {
-                                case .success(let image):
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .scaleEffect(currentScale)
-                                        .offset(currentOffset)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .gesture(
-                                            DragGesture()
-                                                .onChanged { value in
-                                                    currentOffset = CGSize(
-                                                        width: finalOffset.width + value.translation.width,
-                                                        height: finalOffset.height + value.translation.height)
-                                                }
-                                                .onEnded { value in
-                                                    finalOffset = currentOffset
-                                                    // Optional: Reset offset if zoomed out
-                                                    if finalScale == 1.0 {
-                                                        finalOffset = .zero
-                                                        currentOffset = .zero
-                                                    }
-                                                }
-                                        )
-                                        .gesture(
-                                            MagnificationGesture()
-                                                .onChanged { scale in
-                                                    currentScale = finalScale * scale
-                                                }
-                                                .onEnded { scale in
-                                                    finalScale = currentScale
-                                                    // Optional: Limit zoom out to prevent tiny image
-                                                    if finalScale < 1.0 {
-                                                        finalScale = 1.0
-                                                        currentScale = 1.0
-                                                        // Reset offset if completely zoomed out
-                                                        finalOffset = .zero
-                                                        currentOffset = .zero
-                                                    }
-                                                }
-                                        )
-                                        .clipped()
-                                        .contentShape(Rectangle())
-                                case .failure:
-                                    Rectangle()
-                                        .foregroundStyle(.clear)
-                                        .aspectRatio(580.0/480.0, contentMode: .fit)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .overlay {
-                                            Label("An error occurred while downloading the radar image.", systemImage:"exclamationmark.icloud.fill")
-                                                .padding()
-                                        }
-                                default:
-                                    Rectangle()
-                                        .foregroundStyle(.clear)
-                                        .aspectRatio(580.0/480.0, contentMode: .fit)
-                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                        .overlay {
-                                            VStack{
-                                                ProgressView()
-                                                    .tint(.white)
-                                                Text("Loading radar image...")
-                                            }
-                                        }
-                                }
-                            }
+                        if appManager.latestRadarImages.count != 0 {
+                            let imageURL = appManager.latestRadarImages[min(index, appManager.latestRadarImages.count-1)].url
+                            RadarImageView(imageURL: imageURL)
                             
                         }else{
                             Rectangle()
@@ -99,13 +63,110 @@ struct RadarView : View {
                                 .aspectRatio(580.0/480.0, contentMode: .fit)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .overlay {
-                                    Label("No radar image available. This might be due to a connection issue or due to the \(radarStation.name) radar station undergoing maintenance. Please try a different station.", systemImage:"exclamationmark.icloud.fill")
+                                    Label("No radar images available. This might be due to a connection issue or due to the \(radarStation.name) radar station undergoing maintenance. Please try a different station.", systemImage:"exclamationmark.icloud.fill")
                                         .padding()
                                 }
                         }
                         
                         
                         VStack(alignment: .center){
+                            HStack{
+                                Image(systemName: "clock.fill")
+                                    .resizable()
+                                    .scaleEffect(1.3)
+                                    .scaledToFit()
+                                    .foregroundStyle(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Time")
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 5)
+                            if let radarImage = appManager.latestRadarImages[safe: index] {
+                                Text("Observed on ") + Text(radarImage.date, format: .dateTime.weekday(.wide).day().month(.wide).hour().minute().timeZone())
+                            }else{
+                                Text("No image available.")
+                            }
+                            
+//                            Slider(value: Binding(
+//                                get: { Double(appManager.latestRadarImages.count-1-index) },
+//                                set: { index = Int($0.rounded()) }
+//                            ),
+//                                   in: Double(0)...Double(appManager.latestRadarImages.count-1),
+//                                   step: 1,
+//                                   //                                       onEditingChanged: { editing in
+//                                   //                                    if !editing {
+//                                   //                                        print("Slider editing finished. Final value: \(radarSpeed)")
+//                                   //                                    }
+//                                   //                                },
+//                                   label: { Text("Animation speed") }
+//                            )
+//                            .controlSize(.large) // Makes the system style larger
+//                            .buttonStyle(.bordered)
+//                            .foregroundStyle(colourIcons)
+//                            .padding(.horizontal)
+                            
+                            HStack{
+                                if (timerIsRunning){
+                                    Button {
+                                        timerIsRunning = false
+                                        disconnectTimer()
+                                    } label: {
+                                        Label("Pause", systemImage: "pause.fill")
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }else{
+                                    Button {
+                                        timerIsRunning  = true
+                                        connectTimer()
+                                    } label: {
+                                        Label("Play", systemImage: "play.fill")
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                }
+                                Spacer()
+                                Button {
+                                    radarSpeed /= 0.8
+                                    if radarSpeed < 0.05 {
+                                        radarSpeed = 0.05
+                                    }
+                                    disconnectTimer()
+                                    connectTimer()
+                                } label: {
+                                    Label("Slower", systemImage: "tortoise.fill")
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .cornerRadius(0)
+                                .frame(maxWidth: .infinity)
+                                .disabled(radarSpeed==1.0)
+                                Spacer()
+                                Button {
+                                    radarSpeed *= 0.8
+                                    if radarSpeed > 1.0 {
+                                        radarSpeed = 1.0
+                                    }
+                                    disconnectTimer()
+                                    connectTimer()
+                                } label: {
+                                    Label("Faster", systemImage: "hare.fill")
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .disabled(radarSpeed==0.05)
+                                
+                            }
+//                            .controlSize(.large)
+                            .buttonStyle(.bordered)
+                            .foregroundStyle(colourIcons)
+                            .padding(.horizontal)
+                            
+                            Divider()
+                                .frame(height:4)
+                            
+                            
+                            
                             HStack{
                                 Image("radar24x24")
                                     .colorMultiply(colourIcons)
@@ -136,6 +197,7 @@ struct RadarView : View {
                             HStack{
                                 Image(systemName: "cloud.rain.fill")
                                     .resizable()
+                                    .scaleEffect(1.3)
                                     .scaledToFit()
                                     .foregroundStyle(colourIcons)
                                     .frame(width: 16, height: 16)
@@ -165,6 +227,7 @@ struct RadarView : View {
                             HStack{
                                 Image(systemName: "mappin.and.ellipse")
                                     .resizable()
+                                    .scaleEffect(1.3)
                                     .scaledToFit()
                                     .foregroundStyle(colourIcons)
                                     .frame(width: 16, height: 16)
@@ -213,11 +276,89 @@ struct RadarView : View {
                     Spacer()
                 }
             }
+            .onDisappear(perform: { disconnectTimer() })
             Spacer()
         }
         .background(
             LinearGradient(gradient: Gradient(colors: [colourTop, colourTop, colourBottom]), startPoint: .top, endPoint: .bottom)
         )
+    }
+}
+
+struct RadarImageView : View {
+    @State private var currentScale: CGFloat = 1.0
+    @State private var finalScale: CGFloat = 1.0
+    @State private var currentOffset: CGSize = .zero
+    @State private var finalOffset: CGSize = .zero
+    var imageURL: URL
+    
+    var body: some View {
+        AsyncImage(url: imageURL){ phase in
+            switch phase {
+            case .success(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .scaleEffect(currentScale)
+                    .offset(currentOffset)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                currentOffset = CGSize(
+                                    width: finalOffset.width + value.translation.width,
+                                    height: finalOffset.height + value.translation.height)
+                            }
+                            .onEnded { value in
+                                finalOffset = currentOffset
+                                // Optional: Reset offset if zoomed out
+                                if finalScale == 1.0 {
+                                    finalOffset = .zero
+                                    currentOffset = .zero
+                                }
+                            }
+                    )
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { scale in
+                                currentScale = finalScale * scale
+                            }
+                            .onEnded { scale in
+                                finalScale = currentScale
+                                // Optional: Limit zoom out to prevent tiny image
+                                if finalScale < 1.0 {
+                                    finalScale = 1.0
+                                    currentScale = 1.0
+                                    // Reset offset if completely zoomed out
+                                    finalOffset = .zero
+                                    currentOffset = .zero
+                                }
+                            }
+                    )
+                    .clipped()
+                    .contentShape(Rectangle())
+            case .failure:
+                Rectangle()
+                    .foregroundStyle(.clear)
+                    .aspectRatio(580.0/480.0, contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay {
+                        Label("An error occurred while downloading the radar image.", systemImage:"exclamationmark.icloud.fill")
+                            .padding()
+                    }
+            default:
+                Rectangle()
+                    .foregroundStyle(.clear)
+                    .aspectRatio(580.0/480.0, contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay {
+                        VStack{
+                            ProgressView()
+                                .tint(.white)
+                            Text("Loading radar image...")
+                        }
+                    }
+            }
+        }
     }
 }
 

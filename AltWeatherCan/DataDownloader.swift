@@ -46,23 +46,38 @@ actor DataDownloader {
         throw NSError(domain: "getCityPageURL failed to find URL", code: 1, userInfo: nil)
     }
     
-    func getLatestRadarImageUrl(radarStation: RadarStation, radarType: RadarType, radarPrecipitation: RadarPrecipitation) -> URL? {
+    func getLatestRadarImages(radarStation: RadarStation, radarType: RadarType, radarPrecipitation: RadarPrecipitation) -> [RadarImage] {
         let directory_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
         guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
             print("Download error for \(directory_url)")
-            return nil
+            return []
         }
         let url_end = (radarType != .ACCUM) ? "(?i)\(radarPrecipitation.urlComponent)" : "Accum24h"
         guard let file_pattern = try? Regex("20[^\"]*_\(url_end).gif") else{
             print("Regex error")
-            return nil
+            return []
         }
-        guard let match = html_content.firstMatch(of: file_pattern) else {
-            print("Regex no match found")
-            return nil
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd'T'HHmm'Z'"
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+
+        var radarImages : Set<RadarImage> = []
+        for match in html_content.matches(of: file_pattern) {
+            if let date = dateFormatter.date(from: String(match.0.prefix(14))) {
+                let image_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
+                radarImages.insert(RadarImage(url: URL(string: image_url)!, date: date))
+            }else{
+                print("Error: Could not convert string \(String(match.0.prefix(14))) to Date.")
+            }
         }
-        let image_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
-        return URL(string: image_url)!
+        
+        let sortedRadarImages = radarImages.sorted { $0.date > $1.date }
+        guard let latestImage = sortedRadarImages.first else{
+            print("No radar url matches found")
+            return []
+        }
+        let last3hoursRadarImages = sortedRadarImages.filter { latestImage.date.timeIntervalSince($0.date) < 3*60*60 }
+        return last3hoursRadarImages.sorted { $0.date > $1.date }
     }
     
     func getCitypage(site: Site) async throws -> Citypage {

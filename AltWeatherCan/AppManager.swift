@@ -56,7 +56,7 @@ class AppManager : ObservableObject {
     @Published var selectedSite = Site(code: "s0000627", name: "Inukjuak", province: "QC", latitude: 43.74, longitude: 79.37, distance: nil)
     @Published var status : AltWeatherCanStatus = .loading
     @Published var location : CLLocation? = nil
-    @Published var latestRadarImageURL : URL? = nil
+    @Published var latestRadarImages : [RadarImage] = []
     @Published var radarType : RadarType = .DPQPE
     @Published var radarPrecipitation : RadarPrecipitation = .Rain
     @Published var selectedRadarStation : RadarStation? = nil
@@ -147,7 +147,7 @@ class AppManager : ObservableObject {
             await self.refreshRadarImageURL()
         }catch {
             self.status = .error
-            latestRadarImageURL = nil
+            latestRadarImages = []
             print("download error: \(error)")
         }
     }
@@ -155,10 +155,10 @@ class AppManager : ObservableObject {
     func refreshRadarImageURL() async {
         let radarStation = selectedRadarStation ?? selectedSite.closestRadarStation
         if let radarStation {
-            latestRadarImageURL = await dataDownloader.getLatestRadarImageUrl(radarStation: radarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
+            latestRadarImages = await dataDownloader.getLatestRadarImages(radarStation: radarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
             selectedRadarStation = radarStation
         }else{
-            latestRadarImageURL = nil
+            latestRadarImages = []
         }
     }
     
