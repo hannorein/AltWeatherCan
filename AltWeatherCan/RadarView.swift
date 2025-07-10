@@ -87,24 +87,8 @@ struct RadarView : View {
                             }else{
                                 Text("No image available.")
                             }
-                            
-//                            Slider(value: Binding(
-//                                get: { Double(appManager.latestRadarImages.count-1-index) },
-//                                set: { index = Int($0.rounded()) }
-//                            ),
-//                                   in: Double(0)...Double(appManager.latestRadarImages.count-1),
-//                                   step: 1,
-//                                   //                                       onEditingChanged: { editing in
-//                                   //                                    if !editing {
-//                                   //                                        print("Slider editing finished. Final value: \(radarSpeed)")
-//                                   //                                    }
-//                                   //                                },
-//                                   label: { Text("Animation speed") }
-//                            )
-//                            .controlSize(.large) // Makes the system style larger
-//                            .buttonStyle(.bordered)
-//                            .foregroundStyle(colourIcons)
-//                            .padding(.horizontal)
+                            FrameSlider(intValue: $index, maxValue: Double(appManager.latestRadarImages.count-1))
+                                .padding(.horizontal)
                             
                             HStack{
                                 if (timerIsRunning){
@@ -359,6 +343,25 @@ struct RadarImageView : View {
                     }
             }
         }
+    }
+}
+
+struct FrameSlider : View {
+    @Binding var intValue: Int
+    var maxValue: Double
+    
+    var body: some View {
+        Slider(value: Binding(
+            get: { maxValue-Double(intValue) },
+            set: { intValue = Int(maxValue-$0.rounded()) }
+        ),
+               in: 0.0...maxValue,
+               step: 1,
+               label: { Text("Animation speed") }
+        )
+        .controlSize(.large) // Makes the system style larger
+        .buttonStyle(.bordered)
+        .foregroundStyle(colourIcons)
     }
 }
 
