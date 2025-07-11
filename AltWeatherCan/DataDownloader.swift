@@ -47,11 +47,8 @@ actor DataDownloader {
     }
     
     func getLatestRadarImages(radarStation: RadarStation, radarType: RadarType, radarPrecipitation: RadarPrecipitation) -> [RadarImage] {
-        let directory_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
-        guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
-            print("Download error for \(directory_url)")
-            return []
-        }
+        var radarImages : Set<RadarImage> = []
+        
         let url_end = (radarType != .ACCUM) ? "(?i)\(radarPrecipitation.urlComponent)" : "Accum24h"
         guard let file_pattern = try? Regex("20[^\"]*_\(url_end).gif") else{
             print("Regex error")
@@ -60,14 +57,38 @@ actor DataDownloader {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd'T'HHmm'Z'"
         dateFormatter.timeZone = TimeZone(identifier: "UTC")
-
-        var radarImages : Set<RadarImage> = []
+        
+        
+        let directory_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
+        guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
+            print("Download error for \(directory_url)")
+            return []
+        }
+        
         for match in html_content.matches(of: file_pattern) {
             if let date = dateFormatter.date(from: String(match.0.prefix(14))) {
                 let image_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
                 radarImages.insert(RadarImage(url: URL(string: image_url)!, date: date))
             }else{
                 print("Error: Could not convert string \(String(match.0.prefix(14))) to Date.")
+            }
+        }
+        // Check yesterday's dataset if not enough images found.
+        if (radarImages.count < 30 ){
+            print("checking yesterday")
+            let directory_url = "https://dd.meteo.gc.ca/yesterday/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
+            guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
+                print("Download error for \(directory_url)")
+                return []
+            }
+            
+            for match in html_content.matches(of: file_pattern) {
+                if let date = dateFormatter.date(from: String(match.0.prefix(14))) {
+                    let image_url = "https://dd.meteo.gc.ca/yesterday/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
+                    radarImages.insert(RadarImage(url: URL(string: image_url)!, date: date))
+                }else{
+                    print("Error: Could not convert string \(String(match.0.prefix(14))) to Date.")
+                }
             }
         }
         

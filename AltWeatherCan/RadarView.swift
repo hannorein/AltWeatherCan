@@ -97,7 +97,10 @@ struct RadarView : View {
                                 Text("No image available.")
                             }
 
-                            FrameSlider(intValue: $index, maxValue: appManager.latestRadarImages.count-1)
+                            FrameSlider(intValue: $index, maxValue: appManager.latestRadarImages.count-1, whenChanged: {
+                                timerIsRunning = false
+                                disconnectTimer()
+                            })
                                 .disabled(appManager.latestRadarImages.count == 0)
                                 .controlSize(.large) // Makes the system style larger
                                 .buttonStyle(.bordered)
@@ -130,8 +133,8 @@ struct RadarView : View {
                                 Spacer()
                                 Button {
                                     radarSpeed /= 0.8
-                                    if radarSpeed < 0.05 {
-                                        radarSpeed = 0.05
+                                    if radarSpeed > 1.0 {
+                                        radarSpeed = 1.0
                                     }
                                     disconnectTimer()
                                     connectTimer()
@@ -145,8 +148,8 @@ struct RadarView : View {
                                 Spacer()
                                 Button {
                                     radarSpeed *= 0.8
-                                    if radarSpeed > 1.0 {
-                                        radarSpeed = 1.0
+                                    if radarSpeed < 0.05 {
+                                        radarSpeed = 0.05
                                     }
                                     disconnectTimer()
                                     connectTimer()
@@ -166,6 +169,39 @@ struct RadarView : View {
                             Divider()
                                 .frame(height:4)
                             
+                            HStack{
+                                Image(systemName: "mappin.and.ellipse")
+                                    .resizable()
+                                    .scaleEffect(1.3)
+                                    .scaledToFit()
+                                    .foregroundStyle(colourIcons)
+                                    .frame(width: 16, height: 16)
+                                Text("Radar station")
+                                
+                                Spacer()
+                            }
+                            .padding(.horizontal, 5)
+                            
+                            Picker("Radar station", selection: $appManager.selectedRadarStation) {
+                                ForEach(appManager.availableRadarStations, id: \.self) { radarStation in
+                                    Text("\(radarStation.region) (\(radarStation.name))")
+                                        .tag(radarStation)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .frame(maxWidth: .infinity)
+                            .tint(.black)
+                            .onChange(of: appManager.selectedRadarStation) {
+                                timerIsRunning = false
+                                disconnectTimer()
+                                Task {
+                                    await appManager.refreshRadarImageURL()
+                                }
+                            }
+                            
+                            
+                            Divider()
+                                .frame(height:4)
                             
                             
                             HStack{
@@ -187,10 +223,12 @@ struct RadarView : View {
                             .pickerStyle(.menu)
                             .frame(maxWidth: .infinity)
                             .tint(.black)
-                            .task(id: appManager.radarType) {
+                            .onChange(of: appManager.radarType) {
                                 timerIsRunning = false
                                 disconnectTimer()
-                                await appManager.refreshRadarImageURL()
+                                Task {
+                                    await appManager.refreshRadarImageURL()
+                                }
                             }
                             
                             Divider()
@@ -220,42 +258,15 @@ struct RadarView : View {
                             .pickerStyle(.menu)
                             .frame(maxWidth: .infinity)
                             .tint(.black)
-                            .task(id: appManager.radarPrecipitation) {
+                            .onChange(of: appManager.radarPrecipitation) {
                                 timerIsRunning = false
                                 disconnectTimer()
-                                await appManager.refreshRadarImageURL()
-                            }
-                            
-                            Divider()
-                                .frame(height:4)
-                            
-                            HStack{
-                                Image(systemName: "mappin.and.ellipse")
-                                    .resizable()
-                                    .scaleEffect(1.3)
-                                    .scaledToFit()
-                                    .foregroundStyle(colourIcons)
-                                    .frame(width: 16, height: 16)
-                                Text("Radar station")
-                                
-                                Spacer()
-                            }
-                            .padding(.horizontal, 5)
-                            
-                            Picker("Radar station", selection: $appManager.selectedRadarStation) {
-                                ForEach(appManager.availableRadarStations, id: \.self) { radarStation in
-                                    Text("\(radarStation.region) (\(radarStation.name))")
-                                        .tag(radarStation)
+                                Task{
+                                    await appManager.refreshRadarImageURL()
                                 }
                             }
-                            .pickerStyle(.menu)
-                            .frame(maxWidth: .infinity)
-                            .tint(.black)
-                            .task(id: appManager.selectedRadarStation) {
-                                timerIsRunning = false
-                                disconnectTimer()
-                                await appManager.refreshRadarImageURL()
-                            }
+                            
+                            
                             
                         }
                         .padding(.vertical, 8)
@@ -340,6 +351,15 @@ struct RadarImageView : View {
                                 }
                             }
                     )
+                    .gesture(
+                        TapGesture(count: 2)
+                            .onEnded({
+                                finalScale = 1.0
+                                currentScale = 1.0
+                                finalOffset = .zero
+                                currentOffset = .zero
+                            })
+                    )
                     .clipped()
                     .contentShape(Rectangle())
         }else{
@@ -364,7 +384,8 @@ struct RadarImageView : View {
 struct FrameSlider : View {
     @Binding var intValue: Int
     var maxValue: Int
-    
+    let whenChanged: () -> Void
+
     var body: some View {
         Slider(value: Binding(
             get: { Double(maxValue-intValue) },
@@ -372,6 +393,9 @@ struct FrameSlider : View {
         ),
                in: 0.0...Double(max(1,maxValue)),
                step: 1,
+               onEditingChanged: {_ in
+            whenChanged()
+        },
                label: { Text("Frame") }
         )
     }
