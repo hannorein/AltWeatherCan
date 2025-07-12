@@ -155,7 +155,13 @@ class AppManager : ObservableObject {
     func refreshRadarImageURL() async {
         let radarStation = selectedRadarStation ?? selectedSite.closestRadarStation
         if let radarStation {
-            latestRadarImages = await dataDownloader.getLatestRadarImages(radarStation: radarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
+            let newRadarImages = await dataDownloader.getLatestRadarImages(radarStation: radarStation, radarType: radarType, radarPrecipitation: radarPrecipitation)
+            for image in newRadarImages {
+                if let cachedImage = latestRadarImages.filter({ $0.url == image.url }).first?.image {
+                    image.image = cachedImage
+                }
+            }
+            latestRadarImages = newRadarImages
             selectedRadarStation = radarStation
         }else{
             latestRadarImages = []

@@ -294,7 +294,10 @@ struct RadarView : View {
                     Spacer()
                 }
             }
-            .onDisappear(perform: { disconnectTimer() })
+            .onDisappear(perform: {
+                timerIsRunning = false
+                disconnectTimer()
+            })
             Spacer()
         }
         .background(
