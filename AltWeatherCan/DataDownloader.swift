@@ -60,25 +60,26 @@ actor DataDownloader {
         
         
         let directory_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
-        guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
-            print("Download error for \(directory_url)")
-            return []
+        if let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) {
+            for match in html_content.matches(of: file_pattern) {
+                if let date = dateFormatter.date(from: String(match.0.prefix(14))) {
+                    let image_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
+                    radarImages.insert(RadarImage(url: URL(string: image_url)!, date: date))
+                }else{
+                    print("Error: Could not convert string \(String(match.0.prefix(14))) to Date.")
+                }
+            }
+        } else {
+            print("Download error (today) for \(directory_url)")
+            // Don't fail just yet. Check yesterday
         }
         
-        for match in html_content.matches(of: file_pattern) {
-            if let date = dateFormatter.date(from: String(match.0.prefix(14))) {
-                let image_url = "https://dd.meteo.gc.ca/today/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/\(match.0)"
-                radarImages.insert(RadarImage(url: URL(string: image_url)!, date: date))
-            }else{
-                print("Error: Could not convert string \(String(match.0.prefix(14))) to Date.")
-            }
-        }
         // Check yesterday's dataset if not enough images found.
         if (radarImages.count < 30 ){
             print("checking yesterday")
             let directory_url = "https://dd.meteo.gc.ca/yesterday/radar/\(radarType.urlComponent)/GIF/\(radarStation.code)/?C=M;O=D"
             guard let html_content = try? String( contentsOf: URL(string: directory_url)!, encoding: .utf8) else {
-                print("Download error for \(directory_url)")
+                print("Download error (yesterday) for \(directory_url)")
                 return []
             }
             
