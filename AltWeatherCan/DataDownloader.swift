@@ -24,7 +24,7 @@ actor DataDownloader {
             let hour_str = dateFormatter.string(from: check_date)
             
             // Construct directory URL
-            let directory_url = "https://dd.weather.gc.ca/citypage_weather/"+site.province+"/"+hour_str+"/"
+            let directory_url = "https://dd.weather.gc.ca/today/citypage_weather/"+site.province+"/"+hour_str+"/"
             do {
                 let html_content = try String( contentsOf: URL(string: directory_url)!, encoding: .utf8)
                 
@@ -117,7 +117,7 @@ actor DataDownloader {
     
     func getAvailableSites() async throws -> [Site] {
         var newSites: [Site] = []
-        let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/citypage_weather/docs/site_list_en.csv")!, encoding: .utf8)
+        let sourceCSV = try String(contentsOf: URL(string: "https://dd.weather.gc.ca/today/citypage_weather/docs/site_list_en.csv")!, encoding: .utf8)
         var rows = sourceCSV.components(separatedBy: "\n")
         
         rows.removeFirst()
