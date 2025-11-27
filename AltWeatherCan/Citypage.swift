@@ -296,14 +296,14 @@ struct Event : Decodable, Identifiable {
     let type : String
     let url : String
     let description : String
-    let priority : String
+    //let priority : String
     let dateTime : [DateTime]
     
     enum CodingKeys: String, CodingKey {
         case type
         case url
         case description
-        case priority
+       // case priority
         case dateTime
     }
 }
