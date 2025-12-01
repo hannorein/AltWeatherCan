@@ -294,6 +294,7 @@ struct RiseSet : Decodable {
 struct Event : Decodable, Identifiable {
     let id = UUID()
     let type : String
+    let alertColourLevel : String
     let url : String
     let description : String
     //let priority : String
@@ -303,6 +304,7 @@ struct Event : Decodable, Identifiable {
         case type
         case url
         case description
+        case alertColourLevel
        // case priority
         case dateTime
     }

@@ -27,7 +27,8 @@ struct MainView : View {
             }
             if let citypage = appManager.citypage {
                 ForEach(citypage.warnings.event) { event in
-                    let type = event.type.lowercased()
+                    //let type = event.type.lowercased()
+                    let alertColourLevel = event.alertColourLevel.lowercased()
                     Link(destination: URL(string: event.url)!) {
                         HStack {
                             Image("warningTriangle24x24")
@@ -38,7 +39,8 @@ struct MainView : View {
                                 .colorInvert()
                         }
                         .padding(5)
-                        .background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
+                        .background( alertColourLevel == "red" ? .red : (alertColourLevel == "yellow" ? .yellow : (alertColourLevel == "orange" ? .orange : .gray)))
+                        //.background( type == "warning" ? .red : (type == "watch" ? .yellow : .gray))
                     }
                 }
             }
