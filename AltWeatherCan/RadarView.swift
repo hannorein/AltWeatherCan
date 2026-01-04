@@ -250,7 +250,7 @@ struct RadarView : View {
                             
                             Picker("Precipitation", selection: $appManager.radarPrecipitation) {
                                 ForEach(RadarPrecipitation.allCases, id: \.self) { type in
-                                    Text("\(type)")
+                                    Text("\(String(describing: type))")
                                         .tag(type)
                                 }
                             }
