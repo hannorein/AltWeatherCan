@@ -54,7 +54,7 @@
 		374B21522D95E7D600B73804 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		374BF9882EDDF98C004E2770 /* AltWeatherCANTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AltWeatherCANTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3762DE712CCD7308005539C2 /* AltWeatherCAN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AltWeatherCAN.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		37F32CDF2E1C23DF007C8AE5 /* AltWeatherCAN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AltWeatherCAN.entitlements; path = AltWeatherCAN/AltWeatherCAN.entitlements; sourceTree = "<group>"; };
+		37F32CDF2E1C23DF007C8AE5 /* AltWeatherCAN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = AltWeatherCAN.entitlements; path = AltWeatherCan/AltWeatherCAN.entitlements; sourceTree = "<group>"; };
 		37F32CE12E1C2492007C8AE5 /* Seven DayExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Seven DayExtension.entitlements"; sourceTree = "<group>"; };
 		37F32CE42E1C4F86007C8AE5 /* UserDefaultsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */

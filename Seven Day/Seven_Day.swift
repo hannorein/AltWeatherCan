@@ -28,12 +28,17 @@ struct Provider: AppIntentTimelineProvider {
         // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 1 {
-            let defaults = UserDefaults.sharedDefaults
-            
-            var site = Site(code: "s0000630", name: "Default", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
-            if let contentData = defaults.object(forKey: "defaultSite") as? Data,
-               let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
-                site = defaultSite
+            let site : Site
+            if let confSite = configuration.site{
+                site = confSite
+            }else{
+                let defaults = UserDefaults.sharedDefaults
+                if let contentData = defaults.object(forKey: "defaultSite") as? Data,
+                   let defaultSite = try? JSONDecoder().decode(Site.self, from: contentData) {
+                    site = defaultSite
+                }else{
+                    site = Site(code: "s0000630", name: "Default", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
+                }
             }
             print(site)
             
@@ -71,7 +76,7 @@ struct Seven_DayEntryView : View {
 
     var body: some View {
         VStack {
-            Horizontal7DayViewForWidget(forecastGroup: entry.forecastGroup)
+            Horizontal7DayViewForWidget(forecastGroup: entry.forecastGroup, site: entry.configuration.site)
         }
     }
 }
@@ -86,7 +91,7 @@ struct Seven_Day: Widget {
                 .dynamicTypeSize(.medium)
         }
         .configurationDisplayName("Forecast")
-        .description("See the 7 day forecast at a glance! The widget shows the forecast for the location currently selected in the AltWeatherCAN app.")
+        .description("See the 7 day forecast at a glance! By default, the widget shows the forecast for the location currently selected in the AltWeatherCAN app.")
         .supportedFamilies([
             //.systemSmall,
             .systemMedium,

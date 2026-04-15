@@ -11,7 +11,7 @@ import WidgetKit
 
 struct Horizontal7DayViewForWidget: View {
     var forecastGroup : ForecastGroup?
-    
+    var site : Site?
     private func forecastsCleaned () -> [Forecast] {
         if let forecastGroup {
             var forecasts = forecastGroup.forecast
@@ -30,42 +30,42 @@ struct Horizontal7DayViewForWidget: View {
     var body: some View {
         let rows = [GridItem(.fixed(20),spacing: 0), GridItem(.fixed(65),spacing: 0), GridItem(.fixed(65),spacing: 0)]
         
+        
         if forecastGroup == nil{
             Text("Loading...")
         }else{
-            LazyHGrid(rows: rows, spacing: 1) {
-                ForEach(Array(forecastsCleaned().enumerated()), id: \.offset) { index, forecast in
-                    if index % 2 == 0 {
-                        Text(forecast.period.prefix(3))
-                            .frame(width:47, height: 20)
-                        //                        .background(.blue)
-                    }
-                    VStack{
-                        Divider()
-                        //                    Text(index % 2 == 0 ? "Day" : "Night")
-                        //                        .foregroundStyle(.secondary)
-                        //                        .padding(.top, 4)
-                        if (forecast.temperatures.temperature.isFinite){ // If first forecast is night
-                            Image(forecast.abbreviatedForecast.iconName)
-                                .resizable()
-                                .frame(width:30, height: 30)
-                            Text(String(format: "%.0fºC", forecast.temperatures.temperature))
-                                .font(.callout)
-                        }else{
-                            Spacer()
-                            //                            .frame(width: 30, height: 30)
-                        }
-                        
-                    }
-                    
-                    //                .frame(maxWidth:.infinity, maxHeight:.infinity)
-                    //                .font(.callout)
-                    .background(.background)
+            VStack(spacing: 0) {
+                if let site {
+                    Text(site.name)
+                        .font(.caption2)
+                        .fixedSize()
+                        .frame(height: 4)
+                        .padding(.top, 5)
+                        .opacity(0.8)
                 }
+                LazyHGrid(rows: rows, spacing: 1) {
+                    ForEach(Array(forecastsCleaned().enumerated()), id: \.offset) { index, forecast in
+                        if index % 2 == 0 {
+                            Text(forecast.period.prefix(3))
+                                .frame(width:47, height: 20)
+                        }
+                        VStack{
+                            Divider()
+                            if (forecast.temperatures.temperature.isFinite){ // If first forecast is night
+                                Image(forecast.abbreviatedForecast.iconName)
+                                    .resizable()
+                                    .frame(width:30, height: 30)
+                                Text(String(format: "%.0fºC", forecast.temperatures.temperature))
+                                    .font(.callout)
+                            }else{
+                                Spacer()
+                            }
+                        }
+                        .background(.background)
+                    }
+                }
+                .font(.caption2)
             }
-            .font(.caption2)
-            //        .frame(height:170)
-            //        .background(.red)
         }
     }
 }
@@ -77,5 +77,10 @@ struct Horizontal7DayViewForWidget: View {
     let dataDownloader = DataDownloader()
     let citypage = dataDownloader.getDummyCitypage()
     let forecastGroup = citypage.forecastGroup
-    SimpleEntry(date: .now, forecastGroup: forecastGroup, configuration: ConfigurationAppIntent())
+    let site = Site(code: "s0000630", name: "Default", province: "ON", latitude: 43.74, longitude: 79.37, distance: nil)
+    let myIntent = ConfigurationAppIntent()
+    myIntent.site = site
+    return [
+        SimpleEntry(date: .now, forecastGroup: forecastGroup, configuration: myIntent)
+        ]
 }
