@@ -8,7 +8,9 @@ import Foundation
 import AppIntents
 
 struct Site : Identifiable, Hashable, Codable, AppEntity {
-    var id = UUID()
+    var id : String {
+         code
+    }
     let code : String
     let name : String
     let province : String
@@ -31,7 +33,7 @@ struct Site : Identifiable, Hashable, Codable, AppEntity {
 
 struct SiteQuery: EntityStringQuery {
     // Find a specific site when the widget reloads
-    func entities(for identifiers: [UUID]) async throws -> [Site] {
+    func entities(for identifiers: [String]) async throws -> [Site] {
         let allSites = try await SiteCache.shared.getSites();
         return allSites.filter { identifiers.contains($0.id) }
     }
